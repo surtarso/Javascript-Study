@@ -1,2 +1,3 @@
-# javaScript-Projects
-My javascript studies
+# javaScript - Projects
+
+- My javascript studies
