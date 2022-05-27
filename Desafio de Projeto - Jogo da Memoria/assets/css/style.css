@@ -3,14 +3,14 @@
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
-    /* animation: spinAnim 1.25s ease-out 1; */
+    animation: spinAnim 1s ease-out 1;
 }
 @keyframes spinAnim {
     from {
         transform: rotate(0);
     }
     to { 
-        transform: rotate(270deg);
+        transform: rotate(360deg);
     }
 }
 .header-title {
