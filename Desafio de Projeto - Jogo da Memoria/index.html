@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Jogo da memória</title>
+    <title>Distro-Match</title>
 </head>
+
 <body>
-    <main class="memory-game">
+
+    <div class="board">
+        <header>
+            <h1 class="header-title">Distro-Match</h1>
+        </header>
+        <main class="memory-game">
         <div class="card" data-card="bowser">
             <img class="card-front" src="assets/img/card1.jpg" alt="Face da carta">
             <img class="card-back" src="assets/img/box.jpg" alt="Verso da carta">
@@ -56,7 +63,12 @@
             <img class="card-front" src="assets/img/card6.jpg" alt="Face da carta">
             <img class="card-back" src="assets/img/box.jpg" alt="Verso da carta">
         </div>
-    </main>
-    <script src="assets/js/script.js"></script>
+        </main>
+        <footer id="footer">
+            <button class="reset-button"> .Restart. </button>
+        </footer>
+    </div>
+    <script src="assets/js/scripts.js"></script>
 </body>
+
 </html>
