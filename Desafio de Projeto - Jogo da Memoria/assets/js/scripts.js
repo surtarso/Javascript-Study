@@ -13,12 +13,12 @@ let current = 0; //posicao na array de temas
 
 //função para trocar o tema do jogo
 function trocarTema() {
+    //anda na array de temas
     current++;
     if (current == temas.length){
         current = 0
     };
     let tema = temas[current];
-
     //muda a imagem das cartas
     let timestamp = new Date().getTime();
     let i = 1;
@@ -127,8 +127,10 @@ function resetaTabuleiro() {
     iniciaJogo();
 }
 
+temasButton.addEventListener('click', trocarTema);
+
 //inicia o jogo.
 iniciaJogo();
-temasButton.addEventListener('click', trocarTema);
+
 
 
