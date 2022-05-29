@@ -8,7 +8,7 @@ let primeiroClick, segundoClick; //primeiro e segundo clique em cartas
 let travaClick = false; //nao deixar virar mais cartas
 let numeroAcertos = 0;
 let numeroErros = 0;
-let temas = ['img', 'img-distros']; //noma das pastas dos temas
+let temas = ['img', 'img-distros', 'img-masha']; //noma das pastas dos temas
 let current = 0; //posicao na array de temas
 
 //função para trocar o tema do jogo
