@@ -1,10 +1,41 @@
 const cards = document.querySelectorAll('.card');
-const resetButton = document.getElementsByClassName('reset-button')[0];
+const cardFace = document.querySelectorAll('.card-front');
+const cardBack = document.querySelectorAll('.card-back');
+const temasButton = document.getElementsByClassName('temas-button')[0];
+
 let cartaFoiVirada = false; //saber se uma carta ja foi virada
 let primeiroClick, segundoClick; //primeiro e segundo clique em cartas
 let travaClick = false; //nao deixar virar mais cartas
 let numeroAcertos = 0;
 let numeroErros = 0;
+let temas = ['img', 'img-distros']; //noma das pastas dos temas
+let current = 0; //posicao na array de temas
+
+//função para trocar o tema do jogo
+function trocarTema() {
+    current++;
+    if (current == temas.length){
+        current = 0
+    };
+    let tema = temas[current];
+
+    //muda a imagem das cartas
+    let timestamp = new Date().getTime();
+    let i = 1;
+    cardFace.forEach(cardface => {
+        cardface.src = `assets/${tema}/card${i}.jpg?t=` + timestamp;
+        i++;
+        if (i > 6) {
+            i = 1;
+        }
+    });
+    //muda a imagem traseira
+    cardBack.forEach(cardback => {
+        cardback.src = `assets/${tema}/box.jpg?t=` + timestamp;
+    });
+    resetaTabuleiro();
+}
+
 
 //função para virar as cartas
 function virarCarta() {
@@ -96,6 +127,8 @@ function resetaTabuleiro() {
     iniciaJogo();
 }
 
-resetButton.addEventListener('click', resetaTabuleiro);
 //inicia o jogo.
 iniciaJogo();
+temasButton.addEventListener('click', trocarTema);
+
+
