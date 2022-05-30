@@ -28,6 +28,7 @@
     border-color: rgb(10, 131, 131);
     margin-top: 10px;
     margin-left: 43%;
+    transform: scale(1.5);
 }
 body {
     height: 100vh;
