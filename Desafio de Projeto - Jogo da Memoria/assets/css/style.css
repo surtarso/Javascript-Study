@@ -69,12 +69,17 @@ body {
     cursor: pointer;
     transform: scale(1);
     transform-style: preserve-3d; /* adiciona perspectiva 3d, para que o elemento nao fique achatada no plano */
-    transition: transform .9s; /* adiciona efeito de movimento ao flip do card */
+    transition: transform .7s; /* adiciona efeito de movimento ao flip do card */
 }
 
 .card:active{
     transform: scale(0.97);
     transition: transform .2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: transform .3s;
 }
 
 .card-front,
