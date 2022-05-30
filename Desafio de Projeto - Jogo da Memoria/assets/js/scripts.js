@@ -95,7 +95,7 @@ function erreiCartas() {
     }, 1500);
 }
 
-//função que reseta o tabuleiro
+// reativa o mouse click e reseta cartas clicadas
 function ativaJogada() {
     [cartaFoiVirada, travaClick] = [false, false];
     [primeiroClick, segundoClick] = [null, null];
@@ -121,6 +121,7 @@ function checaVitoria() {
     }
 }
 
+//função que reseta o tabuleiro
 function resetaTabuleiro() {
     // reseta numero de erros
     numeroErros = 0;
