@@ -15,24 +15,29 @@ let current = 0; //posicao na array de temas
 function trocarTema() {
     //anda na array de temas
     current++;
+    //volta ao inicio da array se chegar ao fim
     if (current == temas.length){
         current = 0
     };
+    //seta o diretorio do tema atual na variavel tema
     let tema = temas[current];
-    //muda a imagem das cartas
+    //seta metadata na imagem para troca em tempo real
     let timestamp = new Date().getTime();
     let i = 1;
+    //aplica a imagem nas cartas (frente)
     cardFace.forEach(cardface => {
         cardface.src = `assets/${tema}/card${i}.jpg?t=` + timestamp;
         i++;
+        //mantem o set de cartas em 6 cartas (de 12 total, 2x de cada)
         if (i > 6) {
             i = 1;
         }
     });
-    //muda a imagem traseira
+    //aplica a imagem nas cartas (verso)
     cardBack.forEach(cardback => {
         cardback.src = `assets/${tema}/box.jpg?t=` + timestamp;
     });
+    //reinicia o jogo
     resetaTabuleiro();
 }
 
