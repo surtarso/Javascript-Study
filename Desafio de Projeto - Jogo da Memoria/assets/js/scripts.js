@@ -14,7 +14,9 @@ let current = 0; //posicao na array de temas
 
 //função para trocar o tema do jogo
 function trocarTema() {
-    if(travaClick) return; //espera as cartas desvirarem para nao bugar o timeout delas
+    if(travaClick) return; //espera erros desvirarem para nao bugar o timeout
+    // desvira as cartas e embaralha
+    resetaTabuleiro();
     //anda na array de temas
     current++;
     //volta ao inicio da array se chegar ao fim
@@ -39,7 +41,6 @@ function trocarTema() {
     cardBack.forEach(cardback => {
         cardback.src = `assets/${tema}/box.jpg?t=` + timestamp;
     });
-    resetaTabuleiro();
 }
 
 
@@ -106,13 +107,15 @@ function ativaJogada() {
 
 // funcao que (re)inicia o jogo
 function iniciaJogo() {
-    //embaralha as cartas e adiciona evento de click
-    cards.forEach((card) => {
-        let randomPosition = Math.floor(Math.random() * (maxPares * 2));
-        card.style.order = randomPosition;
-        card.addEventListener('click', virarCarta);
-        // card.setAttribute('draggable', false);
-    });
+    //espera as cartas desvirarem para embaralhar
+    setTimeout(() => {
+        //embaralha as cartas e adiciona evento de click
+        cards.forEach((card) => {
+            let randomPosition = Math.floor(Math.random() * (maxPares * 2));
+            card.style.order = randomPosition;
+            card.addEventListener('click', virarCarta);
+        });
+    }, 500);
     ativaJogada();
 }
 
