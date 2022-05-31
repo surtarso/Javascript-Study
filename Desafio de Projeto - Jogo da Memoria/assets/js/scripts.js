@@ -113,7 +113,7 @@ function iniciaJogo() {
         cards.forEach((card) => {
             let randomPosition = Math.floor(Math.random() * (maxPares * 2));
             card.style.order = randomPosition;
-            card.style.scale = 1;
+            // card.style.scale = 1;
             card.addEventListener('click', virarCarta);
         });
     }, 500);
@@ -134,7 +134,8 @@ function resetaTabuleiro() {
     numeroErros = 0;
     // desvirar todas as cartas
     cards.forEach((card) => {
-        card.classList.remove('flip')
+        card.classList.remove('flip');
+        card.style.scale = 1;
     });
     //reinicia o jogo:
     iniciaJogo();
