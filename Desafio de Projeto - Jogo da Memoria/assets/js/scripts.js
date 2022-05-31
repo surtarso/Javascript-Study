@@ -114,8 +114,6 @@ function iniciaJogo() {
 
 function checaVitoria() {
     if (numeroAcertos == 6) {
-        // reseta numero de acertos
-        numeroAcertos = 0;
         alert(`Você venceu! e só errou ${numeroErros} vezes!`);
         resetaTabuleiro();
     }
