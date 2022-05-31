@@ -14,6 +14,7 @@ let current = 0; //posicao na array de temas
 
 //função para trocar o tema do jogo
 function trocarTema() {
+    if(travaClick) return; //espera as cartas desvirarem para nao bugar o timeout delas
     //anda na array de temas
     current++;
     //volta ao inicio da array se chegar ao fim
@@ -38,7 +39,6 @@ function trocarTema() {
     cardBack.forEach(cardback => {
         cardback.src = `assets/${tema}/box.jpg?t=` + timestamp;
     });
-    //reinicia o jogo
     resetaTabuleiro();
 }
 
