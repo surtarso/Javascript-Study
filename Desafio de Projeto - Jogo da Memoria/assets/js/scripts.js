@@ -79,7 +79,9 @@ function acerteiCartas() {
     segundoClick.removeEventListener('click', virarCarta);
     // contagem para vitoria:
     numeroAcertos += 1;
-
+    segundoClick.style.scale = 1.035;
+    primeiroClick.style.scale = 1.035;
+    
     ativaJogada();
 }
 
@@ -108,6 +110,7 @@ function iniciaJogo() {
         let randomPosition = Math.floor(Math.random() * 12);
         card.style.order = randomPosition;
         card.addEventListener('click', virarCarta);
+        // card.setAttribute('draggable', false);
     });
     ativaJogada();
 }

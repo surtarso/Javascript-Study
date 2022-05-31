@@ -3,16 +3,8 @@
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
-    animation: spinAnim 1s ease-out 1;
 }
-@keyframes spinAnim {
-    from {
-        transform: rotate(0);
-    }
-    to { 
-        transform: rotate(360deg);
-    }
-}
+
 .header-title {
     color: rgb(142, 129, 156);
     margin-bottom: 10px;
@@ -20,6 +12,7 @@
     text-decoration: line-through;
     text-decoration-color: rgb(10, 131, 131);
 }
+
 .temas-button {
     cursor: pointer;
     background-color: rgb(104, 95, 114);
@@ -30,6 +23,7 @@
     margin-left: 43%;
     transform: scale(1.5);
 }
+
 body {
     height: 100vh;
     display: flex;
@@ -37,21 +31,11 @@ body {
     background-position: 50%;
     animation: pulseAnim 6s ease-in-out infinite;
 }
-@keyframes pulseAnim {
-    0% {
-        background-size: 105% 105%;
-    }
-    50% {
-        background-size: 130% 130%;
-    }
-    100% {
-        background-size: 105% 105%;
-    }
-}
 
 .board {
     margin: auto;
 }
+
 .memory-game {
     height: 640px;
     width: 640px;
@@ -71,6 +55,7 @@ body {
     transform: scale(1);
     transform-style: preserve-3d; /* adiciona perspectiva 3d, para que o elemento nao fique achatada no plano */
     transition: transform .7s; /* adiciona efeito de movimento ao flip do card */
+    animation: spinAnim 0.5s ease-out 1;
 }
 
 .card:active{
@@ -102,4 +87,24 @@ body {
 
 .card.flip {
     transform: rotateY(180deg);
+}
+
+@keyframes pulseAnim {
+    0% {
+        background-size: 105% 105%;
+    }
+    50% {
+        background-size: 130% 130%;
+    }
+    100% {
+        background-size: 105% 105%;
+    }
+}
+@keyframes spinAnim {
+    from {
+        transform: rotate(0);
+    }
+    to { 
+        transform: rotate(360deg);
+    }
 }
