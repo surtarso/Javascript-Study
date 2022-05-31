@@ -2,6 +2,7 @@ const cards = document.querySelectorAll('.card');
 const cardFace = document.querySelectorAll('.card-front');
 const cardBack = document.querySelectorAll('.card-back');
 const temasButton = document.getElementsByClassName('temas-button')[0];
+const maxPares = 9; //maximo de pares possiveis
 
 let cartaFoiVirada = false; //saber se uma carta ja foi virada
 let primeiroClick, segundoClick; //primeiro e segundo clique em cartas
@@ -28,8 +29,8 @@ function trocarTema() {
     cardFace.forEach(cardface => {
         cardface.src = `assets/${tema}/card${i}.jpg?t=` + timestamp;
         i++;
-        //mantem o set de cartas em 6 cartas (de 12 total, 2x de cada)
-        if (i > 6) {
+        //repete a numeracao no segundo set de cartas iguais (pares de cartas)
+        if (i > maxPares) {
             i = 1;
         }
     });
@@ -107,7 +108,7 @@ function ativaJogada() {
 function iniciaJogo() {
     //embaralha as cartas e adiciona evento de click
     cards.forEach((card) => {
-        let randomPosition = Math.floor(Math.random() * 12);
+        let randomPosition = Math.floor(Math.random() * (maxPares * 2));
         card.style.order = randomPosition;
         card.addEventListener('click', virarCarta);
         // card.setAttribute('draggable', false);
@@ -116,7 +117,7 @@ function iniciaJogo() {
 }
 
 function checaVitoria() {
-    if (numeroAcertos == 6) {
+    if (numeroAcertos == maxPares) {
         alert(`Você venceu! e só errou ${numeroErros} vezes!`);
         resetaTabuleiro();
     }

@@ -8,7 +8,7 @@
 .header-title {
     color: rgb(142, 129, 156);
     margin-bottom: 10px;
-    margin-left: 29%;
+    margin-left: 34%;
     text-decoration: line-through;
     text-decoration-color: rgb(10, 131, 131);
 }
@@ -19,8 +19,8 @@
     color: rgb(54, 6, 54);
     border-radius: 4px;
     border-color: rgb(10, 131, 131);
-    margin-top: 10px;
-    margin-left: 43%;
+    margin-top: 50px;
+    margin-left: 45%;
     transform: scale(1.5);
 }
 
@@ -38,7 +38,7 @@ body {
 
 .memory-game {
     height: 640px;
-    width: 640px;
+    width: 900px;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
@@ -46,8 +46,8 @@ body {
 }
 
 .card {
-    height: calc( 33.333% - 10px);
-    width: calc(25% - 10px);
+    height: calc( 33.336% - 10px);
+    width: calc(16.66% - 10px);
     margin: 5px;
     position: relative;
     box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.534);
