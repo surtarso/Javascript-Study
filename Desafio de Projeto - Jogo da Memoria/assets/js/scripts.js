@@ -123,7 +123,8 @@ function checaVitoria() {
 
 //função que reseta o tabuleiro
 function resetaTabuleiro() {
-    // reseta numero de erros
+    // reseta numero de erros e acertos
+    numeroAcertos = 0;
     numeroErros = 0;
     // desvirar todas as cartas
     cards.forEach((card) => {
