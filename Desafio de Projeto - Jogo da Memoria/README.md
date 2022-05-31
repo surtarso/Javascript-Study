@@ -1,17 +1,17 @@
-## Desafio de Projeto - TGI Bootcamp - DIO
+# Desafio de Projeto - TGI Bootcamp - DIO
 
-Jogo da Memória em HTML/CSS/JavaScript
-##### Modificações:
+## Jogo da Memória em HTML, CSS & JavaScript
+##### Modificações do exemplo dado em aula:
     - Reconstrução completa do código [js]
-    - Aumento do numero de cartas jogáveis de 6 para 9 pares [js, css, html]
-    - Temas e botão para mudar de tema [js, css, html]
-    - Tela de vitória com contagem de erros [js]
+    - Feature: Aumento do numero de cartas jogáveis de 6 para 9 pares [js, css, html]
+    - Feature: Temas e botão para mudar de tema [js, css, html]
+    - Feature: Tela de vitória com contagem de erros [js]
     - Animações de abertura, background e hover das cartas [css]
-    - Remoção de draggin das cartas [html]
+    - QoL: Remoção de dragging das cartas [html]
 
 ### Uso:
 - Clone o repositório ou baixe o .zip
-- Rode o index.html no seu navegador.
+- Abra o index.html no seu navegador.
 
 #### Para adicionar novos temas:
 - Baixe as imagens desejadas, sendo elas 9 imagens frente + 1 imagem verso
