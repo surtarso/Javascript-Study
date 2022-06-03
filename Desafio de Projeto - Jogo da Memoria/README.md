@@ -10,6 +10,7 @@
     - QoL: Remoção de dragging das cartas [html]
 
 ### Uso:
+- [ABRA O JOGO AGORA MESMO](https://surtarso.github.io/javaScript-Projects/Desafio%20de%20Projeto%20-%20Jogo%20da%20Memoria/), ou:
 - Clone o repositório ou baixe o .zip
 - Abra o index.html no seu navegador.
 
