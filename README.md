@@ -1,4 +1,4 @@
-# javaScript - Projects
+# <img src="ico.png" width=30 height=30> JavaScript - Projects
 
 Here lies my javascript studies and projects.
 
