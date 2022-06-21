@@ -1,0 +1,11 @@
+10
+79/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/index.ts1655813416367624952 0
+83/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/package.json1655809084316328641 0
+97/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/dist/index.242b51c6.js.map1655811280389812641 0
+86/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/dist/index.html1655810894988560381 0
+93/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/dist/index.242b51c6.js1655811280385813039 0
+81/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/index.html1655810894888570576 0
+82/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/typing.d.ts1655812868526360233 0
+88/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/package-lock.json1655808474759497606 0
+75/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_1/dist1655811280389812641 1
+70/home/tarso/Development/javaScript-Projects/Learning Typescript/aula_11655812868526360233 1
