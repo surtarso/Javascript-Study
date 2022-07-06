@@ -13,7 +13,8 @@
     border-color: rgb(10, 131, 131);
     margin-top: 50px;
     margin-left: 45%;
-    transform: scale(10);
+    transform: scale(1.5);
+    size: 200%;
 }
 
 body {
