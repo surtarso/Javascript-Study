@@ -14,7 +14,7 @@
 
         <canvas id="myCanvas"></canvas>
 
-        <div id="menuItems">
+        <div id="menuItems" class="menu">
             <div id="menu">
                 <div id="controls">
                     <img src="img/title.png" style="width: 90%"/>
@@ -33,6 +33,15 @@
                     <button onclick="restart()">Iniciar</button>
                 </div>
             </div>
+        </div>
+
+        <div id="endScreen" class="menu" style="display: none;">
+            <img src="img/title.png" style="width: 90%"/>
+                    <br>
+                    <br>
+            <div id="scoreValue"></div>
+            <br>
+            <button onclick="showMenu()">Menu</button>
         </div>
 
         <div id="time"></div>

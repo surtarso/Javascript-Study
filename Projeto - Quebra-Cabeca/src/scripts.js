@@ -203,6 +203,7 @@ function onMouseUp(){
             let now = (new Date()).getTime();
             END_TIME = now;
             setTimeout(playMelody, 500);
+            showEndSCreen();
         }
     }
     SELECTED_PIECE = null;
@@ -568,4 +569,15 @@ function playMelody(){
     setTimeout(function(){
         playNote(keys.MI, 300);
     }, 600);
+}
+
+function showEndSCreen(){
+    const time = END_TIME - START_TIME;
+    document.getElementById("scoreValue").innerHTML = "Score: " + time;
+    document.getElementById("endScreen").style.display = "block";
+}
+
+function showMenu(){
+    document.getElementById("endScreen").style.display = "none";
+    document.getElementById("menuItems").style.display = "block";
 }
