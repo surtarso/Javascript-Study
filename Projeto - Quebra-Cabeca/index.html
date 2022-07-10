@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="src/scripts.js"></script>
+        <link href="src/styles.css" rel="stylesheet" />
+        <title>Quebra-cabeça</title>
+    </head>
+
+    <body onload="main()">
+
+        <canvas id="myCanvas"></canvas>
+
+        <div id="menuItems">
+            <div id="menu">
+                <div id="controls">
+                    <img src="img/title.png" style="width: 90%"/>
+                    <br>
+                    <br>
+                    Dificuldade <select id="difficulty" onchange="setDifficulty()">
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Médio</option>
+                        <option value="hard">Difícil</option>
+                        <option value="insane">Insano</option>
+                    </select>
+                    <br>
+                    <br>
+                    <!-- placeholder for image upload -->
+                    <!-- <input accept="image/*" type=file name=filename id=file> -->
+                    <button onclick="restart()">Iniciar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="time"></div>
+
+    </body>
+
+</html>
