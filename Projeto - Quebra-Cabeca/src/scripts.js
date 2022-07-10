@@ -14,11 +14,15 @@ let POP_SOUND = new Audio('snd/pop.mp3');
 POP_SOUND.volume = 0.5;
 // synthesized audio
 let AUDIO_CONTEXT = new (AudioContext||webkitAudioContext||window.webkitAudioContext)();
-// synth piano keys
+// synth piano keys in hertz (octave 4)
 let keys = {
-    DO: 261.6,
-    RE: 293.7,
-    MI: 329.6
+    DO: 261.63,
+    RE: 293.66,
+    MI: 329.63,
+    FA: 349.23,
+    SOL: 392,
+    LA: 440,
+    SI: 493.88
 }
 
 /*  placeholder to add option for image file later
@@ -26,7 +30,7 @@ function myFunction() {
 
     var file = document.getElementById('file').files[0];
     var reader  = new FileReader();
-    // it's onload event and you forgot (parameters)
+    // it's onload event 
     reader.onload = function(e)  {
         var image = document.createElement("img");
         // the result image data
@@ -103,7 +107,7 @@ function restart(){
     //reset end time
     END_TIME = null;
     randomizePieces();
-    
+
     //hide the menu
     document.getElementById("menuItems").style.display = "none";
 }
