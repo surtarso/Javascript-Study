@@ -16,30 +16,32 @@ POP_SOUND.volume = 0.5;
 let AUDIO_CONTEXT = new (AudioContext||webkitAudioContext||window.webkitAudioContext)();
 // synth piano keys in hertz (octave 4)
 let keys = {
-    DO: 261.63,
-    RE: 293.66,
-    MI: 329.63,
-    FA: 349.23,
-    SOL: 392,
-    LA: 440,
-    SI: 493.88
+    C4: 261.63,
+    D4: 293.66,
+    E4: 329.63,
+    F4: 349.23,
+    G4: 392,
+    A4: 440,
+    B4: 493.88
 }
 
 /*  placeholder to add option for image file later
-function myFunction() {
-
+    //VIDEO = null;
     var file = document.getElementById('file').files[0];
     var reader  = new FileReader();
     // it's onload event 
     reader.onload = function(e)  {
-        var image = document.createElement("img");
+        VIDEO = document.createElement("img");
         // the result image data
-        image.src = e.target.result;
-        document.body.appendChild(image);
-     }
-     // you have to declare the file loading
-     reader.readAsDataURL(file);
- }
+        VIDEO.src = e.target.result;
+        CANVAS.appendChild(VIDEO);
+        handleResize();
+        initializePieces(SIZE.rows, SIZE.columns);
+        updateGame();
+    }
+    
+    // you have to declare the file loading
+    reader.readAsDataURL(file);
  */
 
 // ------------------------------------------------------------ MAIN FUNC:
@@ -53,6 +55,7 @@ function main(){
     //add event listeners for drag n drop operations
     addEventListeners();
 
+    //  ------ config of camera input --------
     //acess the camera thru media devices
     let promise = navigator.mediaDevices.getUserMedia({video:true});
     //this will prompt the user to acess the camera, so after that:
@@ -71,11 +74,11 @@ function main(){
             initializePieces(SIZE.rows, SIZE.columns);
             updateGame();
          }
-    
     //error handling for camera input
     }).catch(function(err){
         alert("Camera error: " + err);
     });
+    //  ------ end config of camera input -------
 }
 
 // ------------------------------------------------------- DIFFICULTY SETTER:
@@ -378,7 +381,7 @@ class Piece{
     // draw the pieces (grid) to "cut" the input (Video)
     draw(context){
         context.beginPath();
-
+        //configure tab format (blob out/in pieces)
         const sz = Math.min(this.width, this.height);
         const neck = 0.05 * sz;   //neck width
         const tabWidth = 0.3 * sz;  //tab width
@@ -387,7 +390,7 @@ class Piece{
         //from top left
         context.moveTo(this.x, this.y);
 
-        // make the tabs on the pieces so it looks like a jigsaw ----------------------- start:
+        // make the tabs on the pieces, so it looks like a jigsaw ----------------------- start:
         //to top right
         if(this.top){
             context.lineTo(this.x + this.width * Math.abs(this.top) - neck, this.y);
@@ -551,6 +554,24 @@ class Piece{
     }
 }
 
+
+// ------------------------------------------------------------ END SCREEN:
+// called by last onMouseUp() when puzzle is completed
+function showEndSCreen(){
+    const time = END_TIME - START_TIME;
+    document.getElementById("scoreValue").innerHTML = "Score: " + time;
+    document.getElementById("endScreen").style.display = "block";
+}
+
+
+// ------------------------------------------------------------ MENU BUTTON:
+// game-end html menu <button>
+function showMenu(){
+    document.getElementById("endScreen").style.display = "none";
+    document.getElementById("menuItems").style.display = "block";
+}
+
+
 // ----------------------------------------------------- DISTANCE CALCULATOR:
 // calculates distance from piece location 
 // to correct location to see if isClose()
@@ -587,26 +608,11 @@ function playNote(key, duration){
 
 // melody setup
 function playMelody(){
-    playNote(keys.DO, 300);
+    playNote(keys.C4, 300);
     setTimeout(function(){
-        playNote(keys.RE, 300);
+        playNote(keys.D4, 300);
     }, 300);
     setTimeout(function(){
-        playNote(keys.MI, 300);
+        playNote(keys.E4, 300);
     }, 600);
-}
-
-// ------------------------------------------------------------ END SCREEN:
-// called by last onMouseUp() when puzzle is completed
-function showEndSCreen(){
-    const time = END_TIME - START_TIME;
-    document.getElementById("scoreValue").innerHTML = "Score: " + time;
-    document.getElementById("endScreen").style.display = "block";
-}
-
-// ------------------------------------------------------------ MENU BUTTON:
-// game end html menu <button>
-function showMenu(){
-    document.getElementById("endScreen").style.display = "none";
-    document.getElementById("menuItems").style.display = "block";
 }
