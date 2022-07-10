@@ -6,6 +6,7 @@ let SCALER = 0.8;  //how much screen space will be used by the video (0.8 = 80% 
 let SIZE = {x:0, y:0, width:0, height:0, rows:3, columns:3};
 let PIECES = [];  // array of jigsaw pieces
 let SELECTED_PIECE = null;   // for mouse events
+// "score"
 let START_TIME = null;
 let END_TIME = null;
 // sounds in files
@@ -37,10 +38,9 @@ function myFunction() {
  }
  */
 
-
+// ------------------------------------------------------------ MAIN FUNC:
 //main function is called in html's <body> "onload"
 function main(){
-
     //define canvas in html
     CANVAS = document.getElementById("myCanvas");
     //use 2d method of the canvas
@@ -74,10 +74,11 @@ function main(){
     });
 }
 
+// ------------------------------------------------------- DIFFICULTY SETTER:
 // called in html's <select> dropdown menu
 function setDifficulty(){
     let diff = document.getElementById("difficulty").value;
-
+    // difficulty set by number of pieces
     switch(diff){
         case "easy":
             initializePieces(3, 3);  // 9
@@ -94,18 +95,23 @@ function setDifficulty(){
     }
 }
 
-
+// --------------------------------------------------------- START/RESTART:
 // start/restart the game html <button>
 function restart(){
+    //get current time
     START_TIME = (new Date()).getTime();
+    //reset end time
     END_TIME = null;
     randomizePieces();
+    
+    //hide the menu
     document.getElementById("menuItems").style.display = "none";
 }
 
-
+// ------------------------------------------------------------ TIME:
 // update clock (playtime)
 function updateTime(){
+    //get current time
     let now = (new Date()).getTime();
     if(START_TIME != null){
         if(END_TIME != null){
@@ -117,8 +123,10 @@ function updateTime(){
 }
 
 
+// -------------------------------------------------------- WIN CONDITION:
 // check win condition/
 function isComplete(){
+    //checks if ALL pieces have the "correct" arg set to true
     for(let i = 0; i < PIECES.length; i++){
         if(PIECES[i].correct == false){
             return false;
@@ -127,13 +135,14 @@ function isComplete(){
     return true;
 }
 
-
+// ------------------------------------------------------- TIME FORMATTER:
 function formatTime(milliseconds){
+    //calculate from milliseconds
     let seconds = Math.floor(milliseconds/1000);
     let s = Math.floor(seconds % 60);
     let m = Math.floor((seconds % (60 * 60)) / 60);
     let h = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
-
+    //format like a digital clock 00:00:00
     let formattedTime = h.toString().padStart(2, '0');
     formattedTime += ":";
     formattedTime += m.toString().padStart(2, '0');
@@ -143,39 +152,47 @@ function formatTime(milliseconds){
     return formattedTime;
 }
 
-
+// ------------------------------------------------------- EVENT LISTENERS:
 // mouse and touch event listeners
 function addEventListeners(){
     // mouse
     CANVAS.addEventListener("mousedown", onMouseDown);
     CANVAS.addEventListener("mousemove", onMouseMove);
     CANVAS.addEventListener("mouseup", onMouseUp);
-    // touchscreen
+    // touch
     CANVAS.addEventListener("touchstart", onTouchStart);
     CANVAS.addEventListener("touchmove", onTouchMove);
     CANVAS.addEventListener("touchend", onTouchEnd);
 }
 
+// --------------------------------------------------------- TOUCH EVENTS:
+//press
 function onTouchStart(evt){
     let loc = {x:evt.touches[0].clientX,
         y:evt.touches[0].clientY};
     onMouseDown(loc);
 }
+//drag
 function onTouchMove(evt){
     let loc = {x:evt.touches[0].clientX,
         y:evt.touches[0].clientY};
     onMouseMove(loc);
 }
+//release
 function onTouchEnd(){
     onMouseUp();
 }
 
+// ---------------------------------------------------------- MOUSE EVENTS:
+//click
 function onMouseDown(evt){
     SELECTED_PIECE = getPressedPiece(evt);
+    //if a piece is actually selected
     if(SELECTED_PIECE != null){
         // make sure selected pieces can go over others
         const index = PIECES.indexOf(SELECTED_PIECE);
 
+        // error check in case a piece doesnt exist
         if(index > -1){
             PIECES.splice(index, 1);
             PIECES.push(SELECTED_PIECE);
@@ -189,17 +206,19 @@ function onMouseDown(evt){
         SELECTED_PIECE.correct = false;
     }
 }
+//drag
 function onMouseMove(evt){
     if(SELECTED_PIECE != null){
         SELECTED_PIECE.x = evt.x - SELECTED_PIECE.offset.x;
         SELECTED_PIECE.y = evt.y - SELECTED_PIECE.offset.y;
     }
 }
+//release
 function onMouseUp(){
     if(SELECTED_PIECE && SELECTED_PIECE.isClose()){
         SELECTED_PIECE.snap();
         // check win condition
-        if(isComplete() && END_TIME == null){
+        if(isComplete() && END_TIME == null){  // <-- WIN CONDITION FULFILLED
             let now = (new Date()).getTime();
             END_TIME = now;
             setTimeout(playMelody, 500);
@@ -210,6 +229,7 @@ function onMouseUp(){
 }
 
 
+// ------------------------------------------------------------ PRESSED PIECE:
 function getPressedPiece(loc){
     for(let i = PIECES.length - 1; i >= 0; i--){
         // if click is within piece boundries
@@ -223,6 +243,7 @@ function getPressedPiece(loc){
 }
 
 
+// ------------------------------------------------------------ RESIZE HANDLER:
 function handleResize(){
     // fill the windows with the canvas
     CANVAS.width = window.innerWidth;
@@ -235,12 +256,13 @@ function handleResize(){
     // set size acordingly preserving aspect ratio
     SIZE.width = resizer * VIDEO.videoWidth;
     SIZE.height = resizer * VIDEO.videoHeight;
-    // half width/height twards left and top
+    // half width/height towards left and top
     SIZE.x = window.innerWidth / 2 - SIZE.width / 2;
     SIZE.y = window.innerHeight / 2 - SIZE.height / 2;
 }
 
 
+// -------------------------------------------------------- UPDATE GAME (MAIN UPDATE):
 function updateGame(){
     //clear the canvas before pieces are drawn
     CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
@@ -265,6 +287,8 @@ function updateGame(){
 }
 
 
+// ------------------------------------------------------- INITIALIZE PIECES:
+// takes "difficulty" args to set rows and cols
 function initializePieces(rows, cols){
     SIZE.rows = rows;
     SIZE.columns = cols;
@@ -278,35 +302,33 @@ function initializePieces(rows, cols){
 
     // add the tabs (puzzle fittings)
     let count = 0;
+
     for(let i = 0; i < SIZE.rows; i++){
         for(let j = 0; j < SIZE.columns; j++){
+
             const piece = PIECES[count];
 
-            if(i == SIZE.rows - 1){  //if on last row, theres no bottom tabs
-                piece.bottom = null;
-            } else {
+            //if on last row, theres no bottom tabs
+            if( i == SIZE.rows - 1 ){ piece.bottom = null; }
+            else {
                 const sgn = (Math.random() - 0.5) < 0?-1:1;  //random 1 or -1
                 piece.bottom = sgn * (Math.random() * 0.4 + 0.3);
             }
 
-            if(j == SIZE.columns - 1){
-                piece.right = null;
-            } else {
+            //if on last column, theres no right tabs
+            if( j == SIZE.columns - 1 ){ piece.right = null; }
+            else {
                 const sgn = (Math.random() - 0.5) < 0?-1:1;
                 piece.right = sgn * (Math.random() * 0.4 + 0.3);
             }
 
-            if(j == 0){
-                piece.left = null;
-            } else {
-                piece.left = -PIECES[count - 1].right;
-            }
+            //if on first column, theres no left tabs
+            if( j == 0 ){ piece.left = null; }
+            else { piece.left = -PIECES[count - 1].right; }
 
-            if(i == 0){  //if on 1st row, theres no tabs on top
-                piece.top = null;
-            } else {
-                piece.top = -PIECES[count - SIZE.columns].bottom;
-            }
+            //if on first row, theres no top tabs
+            if( i == 0 ){ piece.top = null; }
+            else { piece.top = -PIECES[count - SIZE.columns].bottom; }
             
             count++;
         }
@@ -314,6 +336,7 @@ function initializePieces(rows, cols){
 }
 
 
+// ------------------------------------------------------------ RANDOMIZE PIECES:
 function randomizePieces(){
     for(let i = 0; i < PIECES.length; i++){
         let loc = {
@@ -323,26 +346,24 @@ function randomizePieces(){
         }
         PIECES[i].x = loc.x;
         PIECES[i].y = loc.y;
-        //set "piece is in correct location" to false
-        PIECES[i].correct = false;
+        PIECES[i].correct = false;  //set "piece is in correct location" to false
     }
 }
 
 
-
+// ------------------------------------------------------------ PIECE CLASS:
 class Piece{
     constructor(rowIndex, colIndex){
         this.rowIndex = rowIndex;
         this.colIndex = colIndex;
-        //each piece is at correct location at first:
-        //this.x = SIZE.x + SIZE.width * this.colIndex / SIZE.columns;
-        //this.y = SIZE.y + SIZE.height * this.rowIndex / SIZE.rows;
+
         //each piece is sized by the number of "squares" on grid
         this.width = SIZE.width / SIZE.columns;
         this.height = SIZE.height / SIZE.rows;
-        //or: each piece is at correct location at first:
+        //each piece is at correct location at first:
         this.x = SIZE.x + this.width * this.colIndex;
         this.y = SIZE.y + this.height * this.rowIndex;
+
         //correct location of pieces:
         this.xCorrect = this.x; 
         this.yCorrect = this.y;
@@ -353,28 +374,20 @@ class Piece{
     // draw the pieces (grid) to "cut" the input (Video)
     draw(context){
         context.beginPath();
-        // //each piece show the part of the video it is responsible for:
-        // context.drawImage(VIDEO,
-        //     this.colIndex * VIDEO.videoWidth / SIZE.columns,
-        //     this.rowIndex * VIDEO.videoHeight / SIZE.rows,
-        //     VIDEO.videoWidth / SIZE.columns,
-        //     VIDEO.videoHeight / SIZE.rows,
-        //     this.x, this.y, this.width, this.height
-        //     );
 
         const sz = Math.min(this.width, this.height);
         const neck = 0.05 * sz;   //neck width
         const tabWidth = 0.3 * sz;  //tab width
         const tabHeight = 0.3 * sz;
 
-        //context.rect(this.x, this.y, this.width, this.height);
         //from top left
         context.moveTo(this.x, this.y);
 
+        // make the tabs on the pieces so it looks like a jigsaw ----------------------- start:
         //to top right
         if(this.top){
             context.lineTo(this.x + this.width * Math.abs(this.top) - neck, this.y);
-            // round tabs
+            // for round tabs:
             context.bezierCurveTo(
                 this.x + this.width * Math.abs(this.top) - neck,
                 this.y - tabHeight * Math.sign(this.top) * 0.2,
@@ -395,7 +408,7 @@ class Piece{
                 this.x + this.width * Math.abs(this.top) + neck,
                 this.y
             );
-            // triangle tabs
+            // for triangle tabs:
             // context.lineTo(this.x + this.width * Math.abs(this.top), this.y - tabHeight * Math.sign(this.top));
             // context.lineTo(this.x + this.width * Math.abs(this.top) + neck, this.y);
         }
@@ -404,7 +417,7 @@ class Piece{
         //to bottom right
         if(this.right){
             context.lineTo(this.x + this.width, this.y + this.height * Math.abs(this.right) - neck);
-            // round tabs
+            // for round tabs:
             context.bezierCurveTo(
                 this.x + this.width - tabHeight * Math.sign(this.right) * 0.2,
                 this.y + this.height * Math.abs(this.right) - neck,
@@ -425,7 +438,7 @@ class Piece{
                 this.x + this.width,
                 this.y + this.height * Math.abs(this.right) + neck
             );
-            // triangle tabs
+            // for triangle tabs:
             // context.lineTo(this.x + this.width - tabHeight * Math.sign(this.right), this.y + this.height * Math.abs(this.right));
             // context.lineTo(this.x + this.width, this.y + this.height * Math.abs(this.right) + neck);
         }
@@ -434,7 +447,7 @@ class Piece{
         //to bottom left
         if(this.bottom){
             context.lineTo(this.x + this.width * Math.abs(this.bottom) + neck, this.y + this.height);
-            // round tabs
+            // for round tabs:
             context.bezierCurveTo(
                 this.x + this.width * Math.abs(this.bottom) + neck,
                 this.y + this.height + tabHeight * Math.sign(this.bottom) * 0.2,
@@ -455,7 +468,7 @@ class Piece{
                 this.x + this.width * Math.abs(this.bottom) - neck,
                 this.y + this.height
             );
-            // triangle tabs
+            // for triangle tabs:
             // context.lineTo(this.x + this.width * Math.abs(this.bottom), this.y + this.height + tabHeight * Math.sign(this.bottom));
             // context.lineTo(this.x + this.width * Math.abs(this.bottom) - neck, this.y + this.height);
         }
@@ -464,7 +477,7 @@ class Piece{
         //to top left
         if(this.left){
             context.lineTo(this.x, this.y + this.height * Math.abs(this.left) + neck);
-            // round tabs
+            // for round tabs:
             context.bezierCurveTo(
                 this.x + tabHeight * Math.sign(this.left) * 0.2,
                 this.y + this.height * Math.abs(this.left) + neck,
@@ -485,17 +498,20 @@ class Piece{
                 this.x,
                 this.y + this.height * Math.abs(this.left) - neck
             );
-            // triangle tabs
+            // for triangle tabs:
             // context.lineTo(this.x + tabHeight * Math.sign(this.left), this.y + this.height * Math.abs(this.left));
             // context.lineTo(this.x, this.y + this.height * Math.abs(this.left) - neck);
         }
         context.lineTo(this.x, this.y);
+        // make the tabs on the pieces so it looks like a jigsaw ---------------------------- end.
 
-        context.save();
-        context.clip();
+        context.save();  //save the drawing
+        context.clip();  //clip to mask
 
+        // scale pieces so they fill the tabs that go outside the piece
         const scaledTabHeight = Math.min(VIDEO.videoWidth / SIZE.columns,
                                             VIDEO.videoHeight / SIZE.rows) * tabHeight / sz;
+
         //each piece show the part of the video it is responsible for:
         context.drawImage(VIDEO,
             this.colIndex * VIDEO.videoWidth / SIZE.columns - scaledTabHeight,
@@ -507,10 +523,9 @@ class Piece{
             this.width + tabHeight * 2,
             this.height + tabHeight * 2
             );
-        context.restore();
-
-        // strokes or nothing is drawn
-        context.stroke();
+        
+        context.restore();  //restore clip
+        context.stroke();  //strokes or nothing is drawn
     }
     
     // calculates if piece is close enough to snap()
@@ -532,7 +547,9 @@ class Piece{
     }
 }
 
-// calculates distance from piece location to correct location to see if isClose()
+// ----------------------------------------------------- DISTANCE CALCULATOR:
+// calculates distance from piece location 
+// to correct location to see if isClose()
 function distance(p1, p2){
     return Math.sqrt(
         (p1.x - p2.x) * (p1.x - p2.x) + 
@@ -540,6 +557,9 @@ function distance(p1, p2){
     );
 }
 
+
+// --------------------------------------------------------SYNTHESIZED AUDIO:
+// audio setup
 function playNote(key, duration){
     let osc = AUDIO_CONTEXT.createOscillator();
     osc.frequency.value = key;
@@ -561,6 +581,7 @@ function playNote(key, duration){
     }, duration);
 }
 
+// melody setup
 function playMelody(){
     playNote(keys.DO, 300);
     setTimeout(function(){
@@ -571,12 +592,16 @@ function playMelody(){
     }, 600);
 }
 
+// ------------------------------------------------------------ END SCREEN:
+// called by last onMouseUp() when puzzle is completed
 function showEndSCreen(){
     const time = END_TIME - START_TIME;
     document.getElementById("scoreValue").innerHTML = "Score: " + time;
     document.getElementById("endScreen").style.display = "block";
 }
 
+// ------------------------------------------------------------ MENU BUTTON:
+// game end html menu <button>
 function showMenu(){
     document.getElementById("endScreen").style.display = "none";
     document.getElementById("menuItems").style.display = "block";
