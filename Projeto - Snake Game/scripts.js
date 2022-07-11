@@ -1,13 +1,12 @@
 
 document.addEventListener("keydown",keyPush);
 
-CANVAS = document.getElementById("gc");
+CANVAS = document.getElementById("gameCanvas");
 CONTEXT = CANVAS.getContext("2d");
 
-CANVAS.width = 400;
-CANVAS.height = 400;
-
-gs = tc = 20;
+//size relation
+CANVAS.width = CANVAS.height = 400;
+grid_size = tile_count = 20;
 
 //snake and apple start position
 snake_x = snake_y = 10;
@@ -17,36 +16,35 @@ snake_tail_initial = 3
 snake_tail = snake_tail_initial;
 trail = [];
 //move direction (stopped)
-vec_x = vec_y = 0;
-snake_speed = 2.5
+x_velocity = y_velocity = 0;
+snake_speed = 4
 
 setInterval(updateGame,1000/snake_speed);
 
 function updateGame() {
-    snake_x += vec_x;
-    snake_y += vec_y;
+    snake_x += x_velocity;
+    snake_y += y_velocity;
 
-    setDirection();
+    wrapScreen();
     drawBrackground();
-    drawSnake();
     drawApple();
+    drawSnake();
 }
-
-function setDirection(){
+//screen wrap
+function wrapScreen(){
     if(snake_x < 0) {
-        snake_x = tc - 1;
+        snake_x = tile_count - 1;
     }
-    if(snake_x > tc - 1) {
+    if(snake_x > tile_count - 1) {
         snake_x = 0;
     }
     if(snake_y < 0) {
-        snake_y = tc - 1;
+        snake_y = tile_count - 1;
     }
-    if(snake_y > tc - 1) {
+    if(snake_y > tile_count - 1) {
         snake_y = 0;
     }
 }
-
 //background
 function drawBrackground(){
     CONTEXT.fillStyle = "black";
@@ -57,16 +55,25 @@ function drawBrackground(){
             CANVAS.height
     );
 }
-
+//apple
+function drawApple(){
+    CONTEXT.fillStyle = "red";
+    CONTEXT.fillRect(
+        apple_x * grid_size,
+        apple_y * grid_size,
+        grid_size - 2,
+        grid_size - 2
+    );
+}
 //snake
 function drawSnake(){
     CONTEXT.fillStyle = "lime";
     for(var i = 0; i < trail.length; i++) {
         CONTEXT.fillRect(
-                trail[i].x * gs,
-                trail[i].y * gs,
-                gs - 2,
-                gs - 2
+                trail[i].x * grid_size,
+                trail[i].y * grid_size,
+                grid_size - 2,
+                grid_size - 2
         );
 
         //eat own body
@@ -84,20 +91,21 @@ function drawSnake(){
     //eat apple
     if(apple_x == snake_x && apple_y == snake_y) {
         snake_tail++;
-        apple_x = Math.floor(Math.random() * tc);
-        apple_y = Math.floor(Math.random() * tc);
+        apple_x, apple_y = placeApple();
     }
 }
 
-//apple
-function drawApple(){
-    CONTEXT.fillStyle = "red";
-    CONTEXT.fillRect(
-        apple_x * gs,
-        apple_y * gs,
-        gs - 2,
-        gs - 2
-    );
+//prevents apple from spawning on snake body
+function placeApple(){
+    apple_x = Math.floor(Math.random() * tile_count);
+    apple_y = Math.floor(Math.random() * tile_count);
+    for(let i = 0; i < trail.length; i++){
+        if(apple_x == trail[i].x || apple_y == trail[i].y){
+            placeApple()
+        } else {
+            return apple_x, apple_y
+        }
+    }
 }
 
 
@@ -105,16 +113,24 @@ function drawApple(){
 function keyPush(evt) {
     switch(evt.keyCode) {
         case 37:
-            vec_x = -1; vec_y = 0;
+            if(x_velocity != 1){
+                x_velocity = -1; y_velocity = 0;
+            }
             break;
         case 38:
-            vec_x = 0; vec_y = -1;
+            if(y_velocity != 1){
+            x_velocity = 0; y_velocity = -1;
+            }
             break;
         case 39:
-            vec_x = 1; vec_y = 0;
+            if(x_velocity != -1){
+                x_velocity = 1; y_velocity = 0;
+            }
             break;
         case 40:
-            vec_x = 0; vec_y = 1;
+            if(y_velocity != -1){
+            x_velocity = 0; y_velocity = 1;
+            }
             break;
     }
 }
