@@ -68,7 +68,7 @@ function drawApple(){
 //snake
 function drawSnake(){
     CONTEXT.fillStyle = "lime";
-    for(var i = 0; i < trail.length; i++) {
+    for(let i = 0; i < trail.length; i++) {
         CONTEXT.fillRect(
                 trail[i].x * grid_size,
                 trail[i].y * grid_size,
