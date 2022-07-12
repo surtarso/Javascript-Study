@@ -1,8 +1,7 @@
-
-document.addEventListener("keydown",keyPush);
-
 CANVAS = document.getElementById("gameCanvas");
 CONTEXT = CANVAS.getContext("2d");
+SCORE = document.getElementById("score");
+SNAKE_SIZE = document.getElementById("size");
 
 //size relation
 CANVAS.width = CANVAS.height = 400;
@@ -14,16 +13,24 @@ apple_x = apple_y = 15;
 //tail initial size
 snake_tail_initial = 3
 snake_tail = snake_tail_initial;
-trail = [];
+snake_trail = [];
+
+score = 0
+
 //move direction (stopped)
 x_velocity = y_velocity = 0;
 snake_speed = 4
 
+document.addEventListener("keydown",keyPush);
 setInterval(updateGame,1000/snake_speed);
 
 function updateGame() {
+    //move
     snake_x += x_velocity;
     snake_y += y_velocity;
+    //update score/size
+    SCORE.innerHTML = "Score: " + score;
+    SNAKE_SIZE.innerHTML = "Size: " + snake_tail;
 
     wrapScreen();
     drawBrackground();
@@ -68,39 +75,41 @@ function drawApple(){
 //snake
 function drawSnake(){
     CONTEXT.fillStyle = "lime";
-    for(let i = 0; i < trail.length; i++) {
+    for(let i = 0; i < snake_trail.length; i++) {
         CONTEXT.fillRect(
-                trail[i].x * grid_size,
-                trail[i].y * grid_size,
+                snake_trail[i].x * grid_size,
+                snake_trail[i].y * grid_size,
                 grid_size - 2,
                 grid_size - 2
         );
 
         //eat own body
-        if(trail[i].x ==snake_x && trail[i].y == snake_y) {
+        if(snake_trail[i].x ==snake_x && snake_trail[i].y == snake_y) {
             snake_tail = snake_tail_initial;
+            score = 0
         }
     }
 
-    trail.push({x:snake_x, y:snake_y});
+    snake_trail.push({x:snake_x, y:snake_y});
 
-    while(trail.length > snake_tail) {
-        trail.shift();
+    while(snake_trail.length > snake_tail) {
+        snake_trail.shift();
     }
 
     //eat apple
     if(apple_x == snake_x && apple_y == snake_y) {
         snake_tail++;
-        apple_x, apple_y = placeApple();
+        score++;
+        apple_x, apple_y = placeNewApple();
     }
 }
 
 //prevents apple from spawning on snake body
-function placeApple(){
+function placeNewApple(){
     apple_x = Math.floor(Math.random() * tile_count);
     apple_y = Math.floor(Math.random() * tile_count);
-    for(let i = 0; i < trail.length; i++){
-        if(apple_x == trail[i].x || apple_y == trail[i].y){
+    for(let i = 0; i < snake_trail.length; i++){
+        if(apple_x == snake_trail[i].x || apple_y == snake_trail[i].y){
             placeApple()
         } else {
             return apple_x, apple_y

@@ -11,11 +11,23 @@
     <title>Snake</title>
 </head>
 
-<body>
-    <div class="container" style="padding:15px;">
+<body class="container" style="background-color: #1a1b1a;">
+    <div class="card-group" style="padding: 15px;">
+        <div class="row mx-auto">
+            <div class="col d-flex justify-content-center mx-auto">
+                <div class="card bg-dark text-white mx-auto"
+                        style="margin: 0 auto; float: none; margin-bottom: 10px; width: 75vh;">
 
-        <canvas id="gameCanvas"></canvas>
+                    <canvas id="gameCanvas" style="border-radius: 5px;"></canvas>
 
+                    <ul class="list-group list-group-flush" style="border-radius: 5px;">
+                        <li id="score" class="list-group-item">Score</li>
+                        <li id="size" class="list-group-item">Size</li>
+                    </ul>
+
+                <div>
+            </div>
+        </div>
     </div>
 
     <!-- bootstrap js -->
