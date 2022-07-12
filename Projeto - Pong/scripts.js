@@ -30,8 +30,11 @@ function handleMouseClick(){
         showWinScreen = false;
     }
 }
+
 window.onload = function(){
     CANVAS = document.getElementById('gameCanvas');
+    CANVAS.width = 800;
+    CANVAS.height = 600;
     CONTEXT = CANVAS.getContext('2d');
     var FPS = 30;
     setInterval(function(){
@@ -51,6 +54,7 @@ function ballReset(){
     if(player_score >= WIN_SCORE || computer_score >= WIN_SCORE){
         showWinScreen = true;
     }
+    // TODO: add if p1/comp just scored, ball comes from him! (insted of middle)
     ball_x = CANVAS.width/2;
     ball_y = CANVAS.height/2;
 }
@@ -131,7 +135,7 @@ function drawEverything(){
     }
     //net
     drawNet();
-    
+
     //ball
     colorCircle(ball_x, ball_y, 10, 'red')
 
