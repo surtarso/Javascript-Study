@@ -31,6 +31,8 @@ function calcMousePos(evt){
 function handleMouseClick(){
     if(showWinScreen){
         player_score = computer_score = 0;
+        COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
+        PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
         showWinScreen = false;
     }
 }
@@ -154,6 +156,8 @@ function drawEverything(){
     colorCircle(ball_x, ball_y, 10, 'red')
 
     //score
+    PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
+    COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
     //CONTEXT.fillText(player_score, 100, 100);
     //CONTEXT.fillText(computer_score, CANVAS.width - 100, 100);
 }
