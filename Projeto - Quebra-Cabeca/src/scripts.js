@@ -25,24 +25,8 @@ let keys = {
     B4: 493.88
 }
 
-/*  placeholder to add option for image file later
-    //VIDEO = null;
-    var file = document.getElementById('file').files[0];
-    var reader  = new FileReader();
-    // it's onload event 
-    reader.onload = function(e)  {
-        VIDEO = document.createElement("img");
-        // the result image data
-        VIDEO.src = e.target.result;
-        CANVAS.appendChild(VIDEO);
-        handleResize();
-        initializePieces(SIZE.rows, SIZE.columns);
-        updateGame();
-    }
-    
-    // you have to declare the file loading
-    reader.readAsDataURL(file);
- */
+let using_camera = false;
+let using_image = false;
 
 // ------------------------------------------------------------ MAIN FUNC:
 //main function is called in html's <body> "onload"
@@ -54,8 +38,35 @@ function main(){
 
     //add event listeners for drag n drop operations
     addEventListeners();
+}
 
-    //  ------ config of camera input --------
+function useImage(){
+    //show upload box
+    document.getElementById("imageInput").style.display = "inline"
+
+    let imgInput = document.getElementById('imageInput');
+    imgInput.addEventListener('change', function(e) {
+    if(e.target.files) {
+        let imageFile = e.target.files[0]; //here we get the image file
+        var reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onloadend = function (e) {
+            VIDEO = new Image(); // Creates image object
+            VIDEO.src = e.target.result; // Assigns converted image to image object
+            VIDEO.onload = function(ev) {
+                CANVAS.width = VIDEO.width; // Assigns image's width to canvas
+                CANVAS.height = VIDEO.height; // Assigns image's height to canvas
+                //CONTEXT.drawImage(VIDEO,0,0); // Draws the image on canvas
+                handleResize("image");
+                initializePieces(SIZE.rows, SIZE.columns);
+                updateGame();
+                }
+            }
+        }
+    }); 
+}
+
+function useCamera(){
     //acess the camera thru media devices
     let promise = navigator.mediaDevices.getUserMedia({video:true});
     //this will prompt the user to acess the camera, so after that:
@@ -68,7 +79,7 @@ function main(){
         //when video starts playing we update it in the canvas:
         VIDEO.onloadeddata = function(){
             //when metadata about he video is available we resize
-            handleResize();
+            handleResize("camera");
             //listen to resize events
             window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
             initializePieces(SIZE.rows, SIZE.columns);
@@ -78,7 +89,35 @@ function main(){
     }).catch(function(err){
         alert("Camera error: " + err);
     });
-    //  ------ end config of camera input -------
+}
+
+function imagesMenu(){
+    console.log("to be implemented")
+}
+
+// ------------------------------------------------------- IMAGE SRC SETTER:
+// called in html's <select> dropdown menu
+function setImageSource(){
+    let src = document.getElementById("imageSource").value;
+    switch(src){
+        case "builtin":
+            using_camera = false;
+            using_image = true;
+            document.getElementById("imageInput").style.display = "none"
+            imagesMenu();
+            break;
+        case "upload":
+            using_camera = false;
+            using_image = true;
+            useImage();
+            break;
+        case "webcam":
+            using_image = false
+            using_camera = true;
+            document.getElementById("imageInput").style.display = "none"
+            useCamera();
+            break;
+    }
 }
 
 // ------------------------------------------------------- DIFFICULTY SETTER:
@@ -87,16 +126,22 @@ function setDifficulty(){
     let diff = document.getElementById("difficulty").value;
     // difficulty set by number of pieces
     switch(diff){
-        case "easy":
+        case "nine":
             initializePieces(3, 3);  // 9
             break;
-        case "medium":
+        case "sixteen":
+            initializePieces(4, 4);  // 16
+            break;
+        case "twofive":
             initializePieces(5, 5);  // 25
             break;
-        case "hard":
+        case "threesix":
+            initializePieces(6, 6);  // 36
+            break;
+        case "hundred":
             initializePieces(10, 10);  // 100
             break;
-        case "insane":
+        case "thousand":
             initializePieces(40, 25);  // 1000 pieces
             break;
     }
@@ -249,37 +294,49 @@ function getPressedPiece(loc){
     return null;
 }
 
-
 // ------------------------------------------------------------ RESIZE HANDLER:
-function handleResize(){
+function handleResize(string){
     // fill the windows with the canvas
     CANVAS.width = window.innerWidth;
     CANVAS.height = window.innerHeight;
 
-    let resizer = SCALER * Math.min(
-            window.innerWidth / VIDEO.videoWidth,
-            window.innerHeight / VIDEO.videoHeight
+    if(string == "camera"){
+        let resizer = SCALER * Math.min(
+                window.innerWidth / VIDEO.videoWidth,
+                window.innerHeight / VIDEO.videoHeight
+                );
+        // set size acordingly preserving aspect ratio
+        SIZE.width = resizer * VIDEO.videoWidth;
+        SIZE.height = resizer * VIDEO.videoHeight;
+    }
+
+    if(string == "image"){
+        let resizer = SCALER * Math.min(
+            window.innerWidth / VIDEO.width,
+            window.innerHeight / VIDEO.height
             );
-    // set size acordingly preserving aspect ratio
-    SIZE.width = resizer * VIDEO.videoWidth;
-    SIZE.height = resizer * VIDEO.videoHeight;
+        // set size acordingly preserving aspect ratio
+        SIZE.width = resizer * VIDEO.width;
+        SIZE.height = resizer * VIDEO.height;
+    }
     // half width/height towards left and top
     SIZE.x = window.innerWidth / 2 - SIZE.width / 2;
     SIZE.y = window.innerHeight / 2 - SIZE.height / 2;
 }
 
-
 // -------------------------------------------------------- UPDATE GAME (MAIN UPDATE):
 function updateGame(){
+
     //clear the canvas before pieces are drawn
     CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
     //make canvas semi visible (Easy mode - debug mode)
-    CONTEXT.globalAlpha = 0.5;
+    CONTEXT.globalAlpha = 0.05;
     //update the image
     CONTEXT.drawImage(VIDEO,
         SIZE.x, SIZE.y,
         SIZE.width, SIZE.height);
+
     //reset transparency so only video has it, not pieces
     CONTEXT.globalAlpha = 1;
     
@@ -515,22 +572,41 @@ class Piece{
         context.save();  //save the drawing
         context.clip();  //clip to mask
 
-        // scale pieces so they fill the tabs that go outside the piece
-        const scaledTabHeight = Math.min(VIDEO.videoWidth / SIZE.columns,
-                                            VIDEO.videoHeight / SIZE.rows) * tabHeight / sz;
 
-        //each piece show the part of the video it is responsible for:
-        context.drawImage(VIDEO,
-            this.colIndex * VIDEO.videoWidth / SIZE.columns - scaledTabHeight,
-            this.rowIndex * VIDEO.videoHeight / SIZE.rows - scaledTabHeight,
-            VIDEO.videoWidth / SIZE.columns + scaledTabHeight * 2,
-            VIDEO.videoHeight / SIZE.rows + scaledTabHeight * 2,
-            this.x - tabHeight,
-            this.y - tabHeight,
-            this.width + tabHeight * 2,
-            this.height + tabHeight * 2
-            );
-        
+        if(using_image){
+            // scale pieces so they fill the tabs that go outside the piece
+            const scaledTabHeight = Math.min(VIDEO.width / SIZE.columns,
+                                                VIDEO.height / SIZE.rows) * tabHeight / sz;
+
+            //each piece show the part of the video it is responsible for:
+            context.drawImage(VIDEO,
+                this.colIndex * VIDEO.width / SIZE.columns - scaledTabHeight,
+                this.rowIndex * VIDEO.height / SIZE.rows - scaledTabHeight,
+                VIDEO.width / SIZE.columns + scaledTabHeight * 2,
+                VIDEO.height / SIZE.rows + scaledTabHeight * 2,
+                this.x - tabHeight,
+                this.y - tabHeight,
+                this.width + tabHeight * 2,
+                this.height + tabHeight * 2
+                );
+
+        } else if(using_camera){
+            // scale pieces so they fill the tabs that go outside the piece
+            const scaledTabHeight = Math.min(VIDEO.videoWidth / SIZE.columns,
+                                                VIDEO.videoHeight / SIZE.rows) * tabHeight / sz;
+
+            //each piece show the part of the video it is responsible for:
+            context.drawImage(VIDEO,
+                this.colIndex * VIDEO.videoWidth / SIZE.columns - scaledTabHeight,
+                this.rowIndex * VIDEO.videoHeight / SIZE.rows - scaledTabHeight,
+                VIDEO.videoWidth / SIZE.columns + scaledTabHeight * 2,
+                VIDEO.videoHeight / SIZE.rows + scaledTabHeight * 2,
+                this.x - tabHeight,
+                this.y - tabHeight,
+                this.width + tabHeight * 2,
+                this.height + tabHeight * 2
+                );
+        }
         context.restore();  //restore clip
         context.stroke();  //strokes or nothing is drawn
     }
