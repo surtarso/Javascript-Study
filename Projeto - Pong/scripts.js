@@ -37,6 +37,16 @@ function handleMouseClick(){
     }
 }
 
+// function handleTouchStart(evt){
+//     let loc = {x:evt.touches[0].clientX,
+//         y:evt.touches[0].clientY};
+//     handleMouseClick(loc);
+// }
+
+// function handleTouchMove(evt){
+//     calcMousePos(evt);
+// }
+
 window.onload = function(){
     //html elements
     CANVAS = document.getElementById('gameCanvas');
@@ -58,6 +68,9 @@ window.onload = function(){
         paddle_left_y = mousePos.y - (PADDLE_HEIGHT / 2);
         // paddle_right_y = mousePos.y - (PADDLE_HEIGHT / 2);
     })
+    //touch control
+    // CANVAS.addEventListener("touchmove", handleTouchMove);
+    // CANVAS.addEventListener("touchstart", handleTouchStart)
 }
 
 function ballReset(){
