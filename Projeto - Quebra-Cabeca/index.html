@@ -21,16 +21,26 @@
                     <img src="img/title.png" style="width: 90%"/>
                     <br>
                     <br>
-                    Dificuldade <select id="difficulty" onchange="setDifficulty()">
-                        <option value="easy">Fácil</option>
-                        <option value="medium">Médio</option>
-                        <option value="hard">Difícil</option>
-                        <option value="insane">Insano</option>
+                    Peças <select id="difficulty" onchange="setDifficulty()">
+                        <option value="nine">9</option>
+                        <option value="sixteen">16</option>
+                        <option value="twofive">25</option>
+                        <option value="threesix">36</option>
+                        <option value="hundred">100</option>
+                        <option value="thousand">1000</option>
                     </select>
                     <br>
                     <br>
-                    <!-- placeholder for image upload -->
-                    <!-- <input accept="image/*" type=file name=filename id=file> -->
+                    Imagem <select id="imageSource" onchange="setImageSource()">
+                        <option value="builtin">Padrões</option>
+                        <option value="upload">Upload</option>
+                        <option value="webcam">Webcam</option>
+                    </select>
+                    <br>
+                    <input accept="image/*" type="file" name="filename" id="imageInput" 
+                            style="display: none;">
+                    <br>
+                    
                     <button onclick="restart()">Iniciar</button>
                 </div>
             </div>

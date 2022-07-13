@@ -48,3 +48,14 @@ select{
     left: 50%;
     transform: translate(-50%);
 }
+
+#imageInput{
+    padding: 10px;
+    margin-bottom: 10px;;
+    font-size: 3.5vmin;
+    cursor: pointer;
+    border: 1px dashed whitesmoke;
+    border-radius: 1vmin;
+    color: whitesmoke;
+    background-color: gray;
+}

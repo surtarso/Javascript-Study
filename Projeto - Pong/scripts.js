@@ -55,6 +55,8 @@ window.onload = function(){
     CONTEXT = CANVAS.getContext('2d');
     PLAYER_SCORE = document.getElementById("playerScore");
     COMP_SCORE = document.getElementById("computerScore");
+    PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
+    COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
     //game fps
     var FPS = 30;
     setInterval(function(){
@@ -169,8 +171,6 @@ function drawEverything(){
     colorCircle(ball_x, ball_y, 10, 'red')
 
     //score
-    PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
-    COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
     //CONTEXT.fillText(player_score, 100, 100);
     //CONTEXT.fillText(computer_score, CANVAS.width - 100, 100);
 }
