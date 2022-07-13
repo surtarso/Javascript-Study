@@ -8,9 +8,24 @@
         <link rel="shortcut icon" type="image/png" href="favicon.png"/>
         <script src="src/scripts.js"></script>
         <link href="src/styles.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"/>
         <title>Quebra-cabeça</title>
     </head>
+    <style>
+        .images_select{
+            background-color: gray;
+            background-size:contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            height:18rem;
 
+            text-align: center;
+            font-size: 2rem;
+            color:whitesmoke;
+            padding:0px;
+            margin:0;
+        }
+    </style>
     <body onload="main()" style="background-color: #1a1b1a;">
 
         <canvas id="myCanvas"></canvas>
@@ -19,7 +34,7 @@
             <div id="menu">
                 <div id="controls">
                     <img src="img/title.png" style="width: 90%"/>
-                    <br>
+
                     <br>
                     Peças <select id="difficulty" onchange="setDifficulty()">
                         <option value="nine">9</option>
@@ -29,17 +44,25 @@
                         <option value="hundred">100</option>
                         <option value="thousand">1000</option>
                     </select>
+
                     <br>
-                    <br>
-                    Imagem <select id="imageSource" onchange="setImageSource()">
+                    Imagem <select id="imageSource" onchange="setImageSource()"
+                                class="form-select mb-2" multiple>
+                        <option value="none">Escolha a origem da imagem:</option>
                         <option value="builtin">Padrões</option>
                         <option value="upload">Upload</option>
                         <option value="webcam">Webcam</option>
                     </select>
-                    <br>
+
                     <input accept="image/*" type="file" name="filename" id="imageInput" 
                             style="display: none;">
-                    <br>
+                    
+                    <select class="form-select form-select-lg mb-2" multiple size="1" id="builtinImages" style="background-color:gray;border: 1px dashed white;">
+                        <option value="img/boards/yerka.jpg" style="background-image: url(img/boards/yerka.jpg);" class="images_select">Jacek Yerka II</option>
+                        <option value="img/boards/jacek.jpg" style="background-image: url(img/boards/jacek.jpg);" class="images_select">Jacek Yerka II</option>
+                        <option value="img/boards/daughter.jpg" style="background-image: url(img/boards/daughter.jpg);" class="images_select">Daughter</option>
+                        <option value="img/boards/skyline.jpg" style="background-image: url(img/boards/skyline.jpg);" class="images_select">Skyline</option>
+                    </select>
                     
                     <button onclick="restart()">Iniciar</button>
                 </div>
@@ -56,6 +79,7 @@
         </div>
 
         <div id="time"></div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 
 </html>

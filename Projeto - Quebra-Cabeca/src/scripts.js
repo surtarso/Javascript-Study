@@ -1,4 +1,4 @@
-
+const GAME_URL = 'https://tarsogalvao.ddns.net/tom/puzzle/';
 let VIDEO = null;  //element created for inc video signal
 let CANVAS = null;  //place where the video element is drawn
 let CONTEXT = null;  //access camera methods
@@ -35,15 +35,14 @@ function main(){
     CANVAS = document.getElementById("myCanvas");
     //use 2d method of the canvas
     CONTEXT = CANVAS.getContext("2d");
-
+    //hide extra menus
+    document.getElementById("builtinImages").style.display = "none";
+    document.getElementById("imageInput").style.display = "none";
     //add event listeners for drag n drop operations
     addEventListeners();
 }
 
 function useImage(){
-    //show upload box
-    document.getElementById("imageInput").style.display = "inline"
-
     let imgInput = document.getElementById('imageInput');
     imgInput.addEventListener('change', function(e) {
     if(e.target.files) {
@@ -56,8 +55,9 @@ function useImage(){
             VIDEO.onload = function(ev) {
                 CANVAS.width = VIDEO.width; // Assigns image's width to canvas
                 CANVAS.height = VIDEO.height; // Assigns image's height to canvas
-                //CONTEXT.drawImage(VIDEO,0,0); // Draws the image on canvas
                 handleResize("image");
+                //listen to resize events
+                window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
                 initializePieces(SIZE.rows, SIZE.columns);
                 updateGame();
                 }
@@ -91,8 +91,27 @@ function useCamera(){
     });
 }
 
-function imagesMenu(){
-    console.log("to be implemented")
+function useBuiltInImage(){
+    let image_option = document.getElementById('builtinImages');
+    let image_base_url = new URL(GAME_URL);
+
+    image_option.addEventListener('click', function(e) {
+
+        let imageFile = new URL(image_option.value, image_base_url);
+
+        VIDEO = new Image(); // Creates image object
+        VIDEO.src = imageFile; // Assigns converted image to image object
+        VIDEO.onload = function(ev) {
+            CANVAS.width = VIDEO.width; // Assigns image's width to canvas
+            CANVAS.height = VIDEO.height; // Assigns image's height to canvas
+            handleResize("image");
+            //listen to resize events
+            window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
+            initializePieces(SIZE.rows, SIZE.columns);
+            updateGame();
+            }
+            
+    }); 
 }
 
 // ------------------------------------------------------- IMAGE SRC SETTER:
@@ -100,21 +119,29 @@ function imagesMenu(){
 function setImageSource(){
     let src = document.getElementById("imageSource").value;
     switch(src){
+        case "none":
+            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("builtinImages").style.display = "none";
+            break;
         case "builtin":
             using_camera = false;
             using_image = true;
-            document.getElementById("imageInput").style.display = "none"
-            imagesMenu();
+            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("builtinImages").style.display = "inline";
+            useBuiltInImage();
             break;
         case "upload":
             using_camera = false;
             using_image = true;
+            document.getElementById("builtinImages").style.display = "none";
+            document.getElementById("imageInput").style.display = "inline";
             useImage();
             break;
         case "webcam":
             using_image = false
             using_camera = true;
-            document.getElementById("imageInput").style.display = "none"
+            document.getElementById("builtinImages").style.display = "none";
+            document.getElementById("imageInput").style.display = "none";
             useCamera();
             break;
     }
@@ -156,7 +183,7 @@ function restart(){
     END_TIME = null;
     randomizePieces();
 
-    //hide the menu
+    //hide the main menu
     document.getElementById("menuItems").style.display = "none";
 }
 
@@ -240,7 +267,7 @@ function onTouchEnd(){
 function onMouseDown(evt){
     SELECTED_PIECE = getPressedPiece(evt);
     //if a piece is actually selected
-    if(SELECTED_PIECE != null){
+    if(SELECTED_PIECE != null && SELECTED_PIECE.correct == false){
         // make sure selected pieces can go over others
         const index = PIECES.indexOf(SELECTED_PIECE);
 
@@ -260,7 +287,7 @@ function onMouseDown(evt){
 }
 //drag
 function onMouseMove(evt){
-    if(SELECTED_PIECE != null){
+    if(SELECTED_PIECE != null && SELECTED_PIECE.correct == false){
         SELECTED_PIECE.x = evt.x - SELECTED_PIECE.offset.x;
         SELECTED_PIECE.y = evt.y - SELECTED_PIECE.offset.y;
     }
@@ -624,9 +651,9 @@ class Piece{
     snap(){
         this.x = this.xCorrect;
         this.y = this.yCorrect;
+        if(this.correct == false){ POP_SOUND.play();}
         //set "piece in correct place" to true
         this.correct = true;
-        POP_SOUND.play();
     }
 }
 
@@ -643,6 +670,7 @@ function showEndSCreen(){
 // ------------------------------------------------------------ MENU BUTTON:
 // game-end html menu <button>
 function showMenu(){
+    document.getElementById("builtinImages").style.display = "none";
     document.getElementById("endScreen").style.display = "none";
     document.getElementById("menuItems").style.display = "block";
 }
