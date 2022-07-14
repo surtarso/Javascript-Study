@@ -1,5 +1,5 @@
-const GAME_URL = 'https://tarsogalvao.ddns.net/tom/puzzle/';
-let VIDEO = null;  //element created for inc video signal
+const IMAGES_FOLDER_URL = 'https://tarsogalvao.ddns.net/tom/puzzle/img/boards/';
+let PUZZLE_IMG = null;  //element created for inc video/image signal
 let CANVAS = null;  //place where the video element is drawn
 let CONTEXT = null;  //access camera methods
 let SCALER = 0.8;  //how much screen space will be used by the video (0.8 = 80% == 20% margin)
@@ -22,9 +22,8 @@ let keys = {
     F4: 349.23,
     G4: 392,
     A4: 440,
-    B4: 493.88
-}
-
+    B4: 493.88 }
+//toggler for camara/image functions
 let using_camera = false;
 let using_image = false;
 
@@ -41,78 +40,6 @@ function main(){
     document.getElementById("startButton").style.display = "none";
     //add event listeners for drag n drop operations
     addEventListeners();
-}
-
-function useImage(){
-    let imgInput = document.getElementById('imageInput');
-    imgInput.addEventListener('change', function(e) {
-    if(e.target.files) {
-        let imageFile = e.target.files[0]; //here we get the image file
-        var reader = new FileReader();
-        reader.readAsDataURL(imageFile);
-        reader.onloadend = function (e) {
-            VIDEO = new Image(); // Creates image object
-            VIDEO.src = e.target.result; // Assigns converted image to image object
-            VIDEO.onload = function(ev) {
-                CANVAS.width = VIDEO.width; // Assigns image's width to canvas
-                CANVAS.height = VIDEO.height; // Assigns image's height to canvas
-                handleResize("image");
-                //listen to resize events
-                window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
-                initializePieces(SIZE.rows, SIZE.columns);
-                updateGame();
-                }
-            }
-        }
-    }); 
-}
-
-function useCamera(){
-    //acess the camera thru media devices
-    let promise = navigator.mediaDevices.getUserMedia({video:true});
-    //this will prompt the user to acess the camera, so after that:
-    promise.then(function(signal){
-        //create element
-        VIDEO = document.createElement("video");
-        VIDEO.srcObject = signal;
-        //play
-        VIDEO.play();
-        //when video starts playing we update it in the canvas:
-        VIDEO.onloadeddata = function(){
-            //when metadata about he video is available we resize
-            handleResize("camera");
-            //listen to resize events
-            window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
-            initializePieces(SIZE.rows, SIZE.columns);
-            updateGame();
-         }
-    //error handling for camera input
-    }).catch(function(err){
-        alert("Camera error: " + err);
-    });
-}
-
-function useBuiltInImage(){
-    let image_option = document.getElementById('builtinImages');
-    let image_base_url = new URL(GAME_URL);
-
-    image_option.addEventListener('click', function(e) {
-
-        let imageFile = new URL(image_option.value, image_base_url);
-
-        VIDEO = new Image(); // Creates image object
-        VIDEO.src = imageFile; // Assigns converted image to image object
-        VIDEO.onload = function(ev) {
-            CANVAS.width = VIDEO.width; // Assigns image's width to canvas
-            CANVAS.height = VIDEO.height; // Assigns image's height to canvas
-            handleResize("image");
-            //listen to resize events
-            window.addEventListener('resize', handleResize);   //only needed if user is going to keep refreshin the page
-            initializePieces(SIZE.rows, SIZE.columns);
-            updateGame();
-            }
-            
-    }); 
 }
 
 // ------------------------------------------------------- IMAGE SRC SETTER:
@@ -178,10 +105,178 @@ function setDifficulty(){
     }
 }
 
+//------------------------------------------------------ INITIATE PUZZLE IMAGE:
+//using an uploaded image (FILE)
+function useImage(){
+    let imgInput = document.getElementById('imageInput');
+    imgInput.addEventListener('change', function(e) {
+    if(e.target.files) {
+        let imageFile = e.target.files[0]; //here we get the image file
+        var reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onloadend = function (e) {
+            PUZZLE_IMG = new Image(); // Creates image object
+            PUZZLE_IMG.src = e.target.result; // Assigns converted image to image object
+            PUZZLE_IMG.onload = function(ev) {
+                CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
+                CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
+                handleResize("image");
+                //listen to resize events
+                window.addEventListener('resize', handleResize);
+                initializePieces(SIZE.rows, SIZE.columns);
+                updateGame();
+                }
+            }
+        }
+    }); 
+}
+
+// using the webcam (DEVICE)
+function useCamera(){
+    //acess the camera thru media devices
+    let promise = navigator.mediaDevices.getUserMedia({video:true});
+    //this will prompt the user to acess the camera, so after that:
+    promise.then(function(signal){
+        //create element
+        PUZZLE_IMG = document.createElement("video");
+        PUZZLE_IMG.srcObject = signal;
+        //play
+        PUZZLE_IMG.play();
+        //when video starts playing we update it in the canvas:
+        PUZZLE_IMG.onloadeddata = function(){
+            //when metadata about he video is available we resize
+            handleResize("camera");
+            //listen to resize events
+            window.addEventListener('resize', handleResize);
+            initializePieces(SIZE.rows, SIZE.columns);
+            updateGame();
+         }
+    //error handling for camera input
+    }).catch(function(err){
+        alert("Camera error: " + err);
+    });
+}
+
+//using builtin images (URL)
+function useBuiltInImage(){
+    let image_option = document.getElementById('builtinImages');
+    let image_base_url = new URL(IMAGES_FOLDER_URL);
+
+    image_option.addEventListener('click', function(e) {
+
+        let imageFile = new URL(image_option.value, image_base_url);
+
+        PUZZLE_IMG = new Image(); // Creates image object
+        PUZZLE_IMG.src = imageFile; // Assigns converted image to image object
+        PUZZLE_IMG.onload = function(ev) {
+            CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
+            CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
+            handleResize("image");
+            //listen to resize events
+            window.addEventListener('resize', handleResize);
+            initializePieces(SIZE.rows, SIZE.columns);
+            updateGame();
+            }
+            
+    }); 
+}
+
+// ------------------------------------------------------------ RESIZE HANDLER:
+function handleResize(string){
+    // fill the windows with the canvas
+    CANVAS.width = window.innerWidth;
+    CANVAS.height = window.innerHeight;
+
+    if(string == "camera"){
+        let resizer = SCALER * Math.min(
+                window.innerWidth / PUZZLE_IMG.videoWidth,
+                window.innerHeight / PUZZLE_IMG.videoHeight
+                );
+        // set size acordingly preserving aspect ratio
+        SIZE.width = resizer * PUZZLE_IMG.videoWidth;
+        SIZE.height = resizer * PUZZLE_IMG.videoHeight;
+    }
+
+    if(string == "image"){
+        let resizer = SCALER * Math.min(
+            window.innerWidth / PUZZLE_IMG.width,
+            window.innerHeight / PUZZLE_IMG.height
+            );
+        // set size acordingly preserving aspect ratio
+        SIZE.width = resizer * PUZZLE_IMG.width;
+        SIZE.height = resizer * PUZZLE_IMG.height;
+    }
+    // half width/height towards left and top
+    SIZE.x = window.innerWidth / 2 - SIZE.width / 2;
+    SIZE.y = window.innerHeight / 2 - SIZE.height / 2;
+}
+
+// ------------------------------------------------------- INITIALIZE PIECES:
+// takes "difficulty" args to set rows and cols
+function initializePieces(rows, cols){
+    SIZE.rows = rows;
+    SIZE.columns = cols;
+
+    PIECES = [];
+    for(let i = 0; i < SIZE.rows; i++){
+        for(let j = 0; j < SIZE.columns; j++){
+            PIECES.push(new Piece(i,j));
+        }
+    }
+
+    // add the tabs (puzzle fittings)
+    let count = 0;
+
+    for(let i = 0; i < SIZE.rows; i++){
+        for(let j = 0; j < SIZE.columns; j++){
+
+            const piece = PIECES[count];
+
+            //if on last row, theres no bottom tabs
+            if( i == SIZE.rows - 1 ){ piece.bottom = null; }
+            else {
+                const sgn = (Math.random() - 0.5) < 0?-1:1;  //random 1 or -1
+                piece.bottom = sgn * (Math.random() * 0.4 + 0.3);
+            }
+
+            //if on last column, theres no right tabs
+            if( j == SIZE.columns - 1 ){ piece.right = null; }
+            else {
+                const sgn = (Math.random() - 0.5) < 0?-1:1;
+                piece.right = sgn * (Math.random() * 0.4 + 0.3);
+            }
+
+            //if on first column, theres no left tabs
+            if( j == 0 ){ piece.left = null; }
+            else { piece.left = -PIECES[count - 1].right; }
+
+            //if on first row, theres no top tabs
+            if( i == 0 ){ piece.top = null; }
+            else { piece.top = -PIECES[count - SIZE.columns].bottom; }
+            
+            count++;
+        }
+    }
+}
+
+// ------------------------------------------------------------ RANDOMIZE PIECES:
+function randomizePieces(){
+    for(let i = 0; i < PIECES.length; i++){
+        let loc = {
+            // random location based on screen w/h and piece size so pieces dont go off screen
+            x: Math.random() * (CANVAS.width - PIECES[i].width),
+            y: Math.random() * (CANVAS.height - PIECES[i].height)
+        }
+        PIECES[i].x = loc.x;
+        PIECES[i].y = loc.y;
+        PIECES[i].correct = false;  //set "piece is in correct location" to false
+    }
+}
+
 // --------------------------------------------------------- START/RESTART:
 // start/restart the game html <button>
 function restart(){
-    if(VIDEO != null){
+    if(PUZZLE_IMG != null){
         //get current time
         START_TIME = (new Date()).getTime();
         //reset end time
@@ -195,21 +290,6 @@ function restart(){
     }
 }
 
-// ------------------------------------------------------------ TIME:
-// update clock (playtime)
-function updateTime(){
-    //get current time
-    let now = (new Date()).getTime();
-    if(START_TIME != null){
-        if(END_TIME != null){
-            document.getElementById("time").innerHTML = formatTime(END_TIME - START_TIME);
-        } else {
-            document.getElementById("time").innerHTML = formatTime(now - START_TIME);
-        }
-    }
-}
-
-
 // -------------------------------------------------------- WIN CONDITION:
 // check win condition/
 function isComplete(){
@@ -220,23 +300,6 @@ function isComplete(){
         }
     }
     return true;
-}
-
-// ------------------------------------------------------- TIME FORMATTER:
-function formatTime(milliseconds){
-    //calculate from milliseconds
-    let seconds = Math.floor(milliseconds/1000);
-    let s = Math.floor(seconds % 60);
-    let m = Math.floor((seconds % (60 * 60)) / 60);
-    let h = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
-    //format like a digital clock 00:00:00
-    let formattedTime = h.toString().padStart(2, '0');
-    formattedTime += ":";
-    formattedTime += m.toString().padStart(2, '0');
-    formattedTime += ":";
-    formattedTime += s.toString().padStart(2, '0');
-
-    return formattedTime;
 }
 
 // ------------------------------------------------------- EVENT LISTENERS:
@@ -329,36 +392,6 @@ function getPressedPiece(loc){
     return null;
 }
 
-// ------------------------------------------------------------ RESIZE HANDLER:
-function handleResize(string){
-    // fill the windows with the canvas
-    CANVAS.width = window.innerWidth;
-    CANVAS.height = window.innerHeight;
-
-    if(string == "camera"){
-        let resizer = SCALER * Math.min(
-                window.innerWidth / VIDEO.videoWidth,
-                window.innerHeight / VIDEO.videoHeight
-                );
-        // set size acordingly preserving aspect ratio
-        SIZE.width = resizer * VIDEO.videoWidth;
-        SIZE.height = resizer * VIDEO.videoHeight;
-    }
-
-    if(string == "image"){
-        let resizer = SCALER * Math.min(
-            window.innerWidth / VIDEO.width,
-            window.innerHeight / VIDEO.height
-            );
-        // set size acordingly preserving aspect ratio
-        SIZE.width = resizer * VIDEO.width;
-        SIZE.height = resizer * VIDEO.height;
-    }
-    // half width/height towards left and top
-    SIZE.x = window.innerWidth / 2 - SIZE.width / 2;
-    SIZE.y = window.innerHeight / 2 - SIZE.height / 2;
-}
-
 // -------------------------------------------------------- UPDATE GAME (MAIN UPDATE):
 function updateGame(){
 
@@ -368,7 +401,7 @@ function updateGame(){
     //make canvas semi visible (Easy mode - debug mode)
     CONTEXT.globalAlpha = 0.05;
     //update the image
-    CONTEXT.drawImage(VIDEO,
+    CONTEXT.drawImage(PUZZLE_IMG,
         SIZE.x, SIZE.y,
         SIZE.width, SIZE.height);
 
@@ -384,71 +417,6 @@ function updateGame(){
     //call the function recursevely many times to update video camera live
     window.requestAnimationFrame(updateGame);  //60fps if the user pc can handle
 }
-
-
-// ------------------------------------------------------- INITIALIZE PIECES:
-// takes "difficulty" args to set rows and cols
-function initializePieces(rows, cols){
-    SIZE.rows = rows;
-    SIZE.columns = cols;
-
-    PIECES = [];
-    for(let i = 0; i < SIZE.rows; i++){
-        for(let j = 0; j < SIZE.columns; j++){
-            PIECES.push(new Piece(i,j));
-        }
-    }
-
-    // add the tabs (puzzle fittings)
-    let count = 0;
-
-    for(let i = 0; i < SIZE.rows; i++){
-        for(let j = 0; j < SIZE.columns; j++){
-
-            const piece = PIECES[count];
-
-            //if on last row, theres no bottom tabs
-            if( i == SIZE.rows - 1 ){ piece.bottom = null; }
-            else {
-                const sgn = (Math.random() - 0.5) < 0?-1:1;  //random 1 or -1
-                piece.bottom = sgn * (Math.random() * 0.4 + 0.3);
-            }
-
-            //if on last column, theres no right tabs
-            if( j == SIZE.columns - 1 ){ piece.right = null; }
-            else {
-                const sgn = (Math.random() - 0.5) < 0?-1:1;
-                piece.right = sgn * (Math.random() * 0.4 + 0.3);
-            }
-
-            //if on first column, theres no left tabs
-            if( j == 0 ){ piece.left = null; }
-            else { piece.left = -PIECES[count - 1].right; }
-
-            //if on first row, theres no top tabs
-            if( i == 0 ){ piece.top = null; }
-            else { piece.top = -PIECES[count - SIZE.columns].bottom; }
-            
-            count++;
-        }
-    }
-}
-
-
-// ------------------------------------------------------------ RANDOMIZE PIECES:
-function randomizePieces(){
-    for(let i = 0; i < PIECES.length; i++){
-        let loc = {
-            // random location based on screen w/h and piece size so pieces dont go off screen
-            x: Math.random() * (CANVAS.width - PIECES[i].width),
-            y: Math.random() * (CANVAS.height - PIECES[i].height)
-        }
-        PIECES[i].x = loc.x;
-        PIECES[i].y = loc.y;
-        PIECES[i].correct = false;  //set "piece is in correct location" to false
-    }
-}
-
 
 // ------------------------------------------------------------ PIECE CLASS:
 class Piece{
@@ -610,15 +578,15 @@ class Piece{
 
         if(using_image){
             // scale pieces so they fill the tabs that go outside the piece
-            const scaledTabHeight = Math.min(VIDEO.width / SIZE.columns,
-                                                VIDEO.height / SIZE.rows) * tabHeight / sz;
+            const scaledTabHeight = Math.min(PUZZLE_IMG.width / SIZE.columns,
+                                                PUZZLE_IMG.height / SIZE.rows) * tabHeight / sz;
 
             //each piece show the part of the video it is responsible for:
-            context.drawImage(VIDEO,
-                this.colIndex * VIDEO.width / SIZE.columns - scaledTabHeight,
-                this.rowIndex * VIDEO.height / SIZE.rows - scaledTabHeight,
-                VIDEO.width / SIZE.columns + scaledTabHeight * 2,
-                VIDEO.height / SIZE.rows + scaledTabHeight * 2,
+            context.drawImage(PUZZLE_IMG,
+                this.colIndex * PUZZLE_IMG.width / SIZE.columns - scaledTabHeight,
+                this.rowIndex * PUZZLE_IMG.height / SIZE.rows - scaledTabHeight,
+                PUZZLE_IMG.width / SIZE.columns + scaledTabHeight * 2,
+                PUZZLE_IMG.height / SIZE.rows + scaledTabHeight * 2,
                 this.x - tabHeight,
                 this.y - tabHeight,
                 this.width + tabHeight * 2,
@@ -627,15 +595,15 @@ class Piece{
 
         } else if(using_camera){
             // scale pieces so they fill the tabs that go outside the piece
-            const scaledTabHeight = Math.min(VIDEO.videoWidth / SIZE.columns,
-                                                VIDEO.videoHeight / SIZE.rows) * tabHeight / sz;
+            const scaledTabHeight = Math.min(PUZZLE_IMG.videoWidth / SIZE.columns,
+                                                PUZZLE_IMG.videoHeight / SIZE.rows) * tabHeight / sz;
 
             //each piece show the part of the video it is responsible for:
-            context.drawImage(VIDEO,
-                this.colIndex * VIDEO.videoWidth / SIZE.columns - scaledTabHeight,
-                this.rowIndex * VIDEO.videoHeight / SIZE.rows - scaledTabHeight,
-                VIDEO.videoWidth / SIZE.columns + scaledTabHeight * 2,
-                VIDEO.videoHeight / SIZE.rows + scaledTabHeight * 2,
+            context.drawImage(PUZZLE_IMG,
+                this.colIndex * PUZZLE_IMG.videoWidth / SIZE.columns - scaledTabHeight,
+                this.rowIndex * PUZZLE_IMG.videoHeight / SIZE.rows - scaledTabHeight,
+                PUZZLE_IMG.videoWidth / SIZE.columns + scaledTabHeight * 2,
+                PUZZLE_IMG.videoHeight / SIZE.rows + scaledTabHeight * 2,
                 this.x - tabHeight,
                 this.y - tabHeight,
                 this.width + tabHeight * 2,
@@ -694,6 +662,36 @@ function distance(p1, p2){
     );
 }
 
+// ------------------------------------------------------------ TIME:
+// update clock (playtime)
+function updateTime(){
+    //get current time
+    let now = (new Date()).getTime();
+    if(START_TIME != null){
+        if(END_TIME != null){
+            document.getElementById("time").innerHTML = formatTime(END_TIME - START_TIME);
+        } else {
+            document.getElementById("time").innerHTML = formatTime(now - START_TIME);
+        }
+    }
+}
+
+// ------------------------------------------------------- TIME FORMATTER:
+function formatTime(milliseconds){
+    //calculate from milliseconds
+    let seconds = Math.floor(milliseconds/1000);
+    let s = Math.floor(seconds % 60);
+    let m = Math.floor((seconds % (60 * 60)) / 60);
+    let h = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
+    //format like a digital clock 00:00:00
+    let formattedTime = h.toString().padStart(2, '0');
+    formattedTime += ":";
+    formattedTime += m.toString().padStart(2, '0');
+    formattedTime += ":";
+    formattedTime += s.toString().padStart(2, '0');
+
+    return formattedTime;
+}
 
 // --------------------------------------------------------SYNTHESIZED AUDIO:
 // audio setup
