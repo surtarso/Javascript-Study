@@ -44,7 +44,8 @@ function init(){
     }
 }
 
-//draws rect with color and border
+//----------------------------------------------- DRAW GAME ITEMS:
+//draws rectangles (brick/paddle/bg)
 function drawRect(color, x, y, w, h) {
     CONTEXT.fillStyle = color
     CONTEXT.beginPath()
@@ -53,7 +54,7 @@ function drawRect(color, x, y, w, h) {
     CONTEXT.stroke()
 }
 
-//draw ball
+//draw circles (ball)
 function drawCircle(color, x, y, r) {
     CONTEXT.fillStyle = color
     CONTEXT.beginPath()
@@ -61,7 +62,7 @@ function drawCircle(color, x, y, r) {
     CONTEXT.fill()
 }
 
-//draw current game state
+//draw game details
 function draw(){
     //background
     drawRect('black', 0, 0, CANVAS.width, CANVAS.height);
@@ -73,58 +74,66 @@ function draw(){
         
         if (!current_brick.active) {continue};
         //bricks
-        // drawRect(getRandomColors(), current_brick.x, current_brick.y, brick_width, brick_height);
         drawRect('#1a1a', current_brick.x, current_brick.y, brick_width, brick_height);
     }
     //paddle
     drawRect('gray', paddle_x-paddle_width/2, paddle_y, paddle_width, paddle_height);
 }
 
+//random colors for effects (UNUSED SO FAR)
 function getRandomColors(){
     var brick_colors = ['darkpink', 'darkviolet', 'darkblue'];
     var n = Math.round(Math.random() * brick_colors.length);
     return brick_colors[n];
 }
 
+//-------------------------------------------------- GAME LOGIC:
 //ball movement / hits
 function move(){
+    //bounce on side walls
     if (ball_loc_x - ball_size + ball_dir_x < 0 ||
             ball_loc_x + ball_size + ball_dir_x > CANVAS.width){
         ball_dir_x = -ball_dir_x;
     };
+    //bounce on top wall
     if (ball_loc_y - ball_size + ball_dir_y < 0){
         ball_dir_y = -ball_dir_y;
     };
 
-    //----------------------------------- LOSE CONDITION ball outside of game field
+    //--------- LOSE CONDITION ball past paddle
     if (ball_loc_y - ball_size > paddle_y){
-        return false;
+        return false;  //stops draw()
     };
 
+    //hit paddle
     if (ball_loc_y + ball_size > paddle_y &&
             ball_loc_x + ball_size > paddle_x - paddle_width / 2 &&
                 ball_loc_x - ball_size < paddle_x + paddle_width / 2){
+        //bounce
         ball_dir_y = -ball_dir_y;
     };
     
+    //ball movement
     ball_loc_x += ball_dir_x;
     ball_loc_y += ball_dir_y;
     
+    // ball hit test
     for (var i = 0; i < bricks.length; i++){
         var b = bricks[i];
         if (!b.active){ continue };
-
+        // ball hits brick
         if (b.x < ball_loc_x + ball_size &&
                 ball_loc_x - ball_size < b.x + brick_width &&
                     b.y < ball_loc_y + ball_size &&
                         ball_loc_y - ball_size < b.y + brick_height){
-
+            //deactivate brick
             b.active = false;
+            //bounce
             ball_dir_y = -ball_dir_y;
             break;
         };
     };
-    return true;
+    return true;  //keeps draw()ing
 }
 
 //main update on interval
@@ -136,6 +145,8 @@ function updateGame(){
     draw();
 }
 
+//--------------------------------------------------- MOVEMENT:
+//paddle movement setup
 document.addEventListener("keydown", function(e){
     switch (e.keyCode) {
         case 37:
@@ -151,5 +162,6 @@ document.addEventListener("keydown", function(e){
     };
 });
 
+//set-up bricks and start game
 init();
 setInterval(updateGame, 1);
