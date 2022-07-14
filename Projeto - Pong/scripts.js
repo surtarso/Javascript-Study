@@ -3,8 +3,8 @@ var CONTEXT;
 var ball_x = 50;
 var ball_y = 50
 
-var min_y = -15;
-var max_y = 15;
+var min_y = -10;
+var max_y = 10;
 var ball_random_y = Math.floor(Math.random() * (max_y - min_y + 1)) + min_y;
 
 var ball_speed_y = ball_random_y;
@@ -32,6 +32,15 @@ function calcMousePos(evt){
     var mouse_x = evt.clientX - rect.left - root.scrollLeft;
     var mouse_y = evt.clientY - rect.top - root.scrollTop;
     return {x:mouse_x, y:mouse_y}
+}
+
+function calTouchPos(evt){
+    var rect = CANVAS.getBoundingClientRect();
+    var root = document.documentElement;
+    var touch = evt.touches[0];
+    var touch_x = touch.clientX - rect.left - root.scrollLeft;
+    var touch_y = touch.clientY - rect.top - root.scrollTop;
+    return {x:touch_x, y:touch_y}
 }
 
 function handleMouseClick(){
@@ -76,7 +85,11 @@ window.onload = function(){
     CANVAS.addEventListener('mousemove', function(evt){
         var mousePos = calcMousePos(evt);
         paddle_left_y = mousePos.y - (PADDLE_HEIGHT / 2);  //player 1
-        // paddle_right_y = mousePos.y - (PADDLE_HEIGHT / 2);  //computer
+    });
+
+    CANVAS.addEventListener('touchmove', function(evt){
+        var touch_position = calTouchPos(evt);
+        paddle_left_y = touch_position.y - (PADDLE_HEIGHT / 2);  //player 1
     });
 }
 
