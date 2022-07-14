@@ -3,18 +3,19 @@
 }
 .btn{
     color:black;
-    margin: 1px;
-    margin-bottom: 4px;
+    margin: 2px;
     margin-left: auto;
     margin-right: auto;
 }
 .up-btn{
-    margin-left: 48px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .buttons{
     border-radius: 4px;
-    padding: 0;
     margin: 5px;
+    left: 50%;
     margin-left: auto;
     margin-right: auto;
 }
