@@ -1,0 +1,36 @@
+.container{
+    background-color: #1a1b1a;
+}
+.btn{
+    color:black;
+    margin: 1px;
+    margin-bottom: 4px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.up-btn{
+    margin-left: 48px;
+}
+.buttons{
+    border-radius: 4px;
+    padding: 0;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#score,#size{
+    color: black;
+    background-color: darkgray;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0;
+}
+.card-group{
+    padding: 15px;
+}
+.card{
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+    width: 75vh;
+}
