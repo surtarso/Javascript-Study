@@ -285,6 +285,9 @@ function restart(){
 
         //hide the main menu
         document.getElementById("menuItems").style.display = "none";
+        //play melody
+        playStartMelody();
+
     } else {
         alert("Please choose an image!");
     }
@@ -371,7 +374,7 @@ function onMouseUp(){
         if(isComplete() && END_TIME == null){  // <-- WIN CONDITION FULFILLED
             let now = (new Date()).getTime();
             END_TIME = now;
-            setTimeout(playMelody, 500);
+            setTimeout(playWinMelody, 500);
             showEndSCreen();
         }
     }
@@ -717,12 +720,22 @@ function playNote(key, duration){
 }
 
 // melody setup
-function playMelody(){
+function playWinMelody(){
     playNote(keys.C4, 300);
     setTimeout(function(){
         playNote(keys.D4, 300);
     }, 300);
     setTimeout(function(){
         playNote(keys.E4, 300);
+    }, 600);
+}
+
+function playStartMelody(){
+    playNote(keys.C4, 300);
+    setTimeout(function(){
+        playNote(keys.E4, 300);
+    }, 300);
+    setTimeout(function(){
+        playNote(keys.G4, 300);
     }, 600);
 }
