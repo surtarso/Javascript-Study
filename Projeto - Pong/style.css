@@ -1,0 +1,20 @@
+.container{
+    background-color: #1a1b1a;
+}
+
+.card-group{
+    padding: 15px;
+}
+
+.card{
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+    width: 100vh;
+}
+
+.list-group-item,
+.card-header{
+    margin-left: 10px;
+    padding: 1px;
+}

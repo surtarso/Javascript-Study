@@ -2,8 +2,13 @@ var CANVAS;
 var CONTEXT;
 var ball_x = 50;
 var ball_y = 50
+
+var min_y = -15;
+var max_y = 15;
+var ball_random_y = Math.floor(Math.random() * (max_y - min_y + 1)) + min_y;
+
+var ball_speed_y = ball_random_y;
 var ball_speed_x = 10;
-var ball_speed_y = 4;
 
 const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
@@ -16,9 +21,10 @@ var COMP_SCORE;
 //code
 var player_score = 0;
 var computer_score = 0;
-const WIN_SCORE = 10
+const WIN_SCORE = 5;
 
 var showWinScreen = false;
+var lastscored = '';
 
 function calcMousePos(evt){
     var rect = CANVAS.getBoundingClientRect();
@@ -37,60 +43,70 @@ function handleMouseClick(){
     }
 }
 
-// function handleTouchStart(evt){
-//     let loc = {x:evt.touches[0].clientX,
-//         y:evt.touches[0].clientY};
-//     handleMouseClick(loc);
-// }
-
-// function handleTouchMove(evt){
-//     calcMousePos(evt);
-// }
-
 window.onload = function(){
-    //html elements
+    //get html elements
     CANVAS = document.getElementById('gameCanvas');
     CANVAS.width = 800;
     CANVAS.height = 600;
     CONTEXT = CANVAS.getContext('2d');
+    CONTEXT.font = "30px Georgia";  //set canvas font
     PLAYER_SCORE = document.getElementById("playerScore");
     COMP_SCORE = document.getElementById("computerScore");
+    //set initial score
     PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
     COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
+
+    //pc starts game
+    ball_x = CANVAS.width - PADDLE_THICKNESS;
+    ball_y = paddle_right_y + (PADDLE_HEIGHT/2);
+    //toggle click to start
+    showWinScreen = true
+
     //game fps
     var FPS = 30;
     setInterval(function(){
         moveEverything();
         drawEverything()
     },1000/FPS);
+
     //mouse control
     CANVAS.addEventListener('mousedown', handleMouseClick);
+
+    //position control
     CANVAS.addEventListener('mousemove', function(evt){
         var mousePos = calcMousePos(evt);
-        paddle_left_y = mousePos.y - (PADDLE_HEIGHT / 2);
-        // paddle_right_y = mousePos.y - (PADDLE_HEIGHT / 2);
-    })
-    //touch control
-    // CANVAS.addEventListener("touchmove", handleTouchMove);
-    // CANVAS.addEventListener("touchstart", handleTouchStart)
+        paddle_left_y = mousePos.y - (PADDLE_HEIGHT / 2);  //player 1
+        // paddle_right_y = mousePos.y - (PADDLE_HEIGHT / 2);  //computer
+    });
 }
 
 function ballReset(){
     if(player_score >= WIN_SCORE || computer_score >= WIN_SCORE){
         showWinScreen = true;
     }
-    // TODO: add if p1/comp just scored, ball comes from him! (insted of middle)
-    ball_x = CANVAS.width/2;
-    ball_y = CANVAS.height/2;
+    
+    if(lastscored == 'computer'){
+        ball_x = CANVAS.width - PADDLE_THICKNESS;
+        ball_y = paddle_right_y + (PADDLE_HEIGHT/2);
+    }
+    if(lastscored == 'player'){
+        ball_x = 0;
+        ball_y = paddle_left_y + (PADDLE_HEIGHT/2);
+    }
+    if(lastscored == ''){
+        ball_x = CANVAS.width/2;
+        ball_y = CANVAS.height/2;
+    }
+    ball_speed_y = ball_random_y;
 }
 
 //"a.i."
 function computerMovement(){
     var paddle_right_y_center = paddle_right_y + (PADDLE_HEIGHT / 2);
     if(paddle_right_y_center < ball_y - 35){
-        paddle_right_y += 6;
+        paddle_right_y += 7;
     } else if(paddle_right_y_center > ball_y + 35){
-        paddle_right_y -= 6;
+        paddle_right_y -= 7;
     }
 }
 
@@ -112,6 +128,7 @@ function moveEverything(){
         } else {
             computer_score++;
             COMP_SCORE.innerHTML = "Computer Score: " + computer_score;
+            lastscored = 'computer';
             ballReset();
         }
     }
@@ -124,6 +141,7 @@ function moveEverything(){
         } else {
             player_score++;
             PLAYER_SCORE.innerHTML = "Player Score: " + player_score;
+            lastscored = 'player';
             ballReset(); 
         }
     }
@@ -161,7 +179,7 @@ function drawEverything(){
             PLAYER_SCORE.innerHTML = "Player: " + player_score + "  vs  Computer: " + computer_score;
         }
 
-        CONTEXT.fillText("click to restart", 350, 300);
+        CONTEXT.fillText("click to start", 330, 300);
         return;
     }
     //net
@@ -170,7 +188,7 @@ function drawEverything(){
     //ball
     colorCircle(ball_x, ball_y, 10, 'red')
 
-    //score
+    //score inside canvas
     //CONTEXT.fillText(player_score, 100, 100);
     //CONTEXT.fillText(computer_score, CANVAS.width - 100, 100);
 }
