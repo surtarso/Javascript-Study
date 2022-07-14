@@ -1,8 +1,9 @@
-body{
+.body{
     margin: 0;
     overflow: hidden; /*no scroll bar*/
     overscroll-behavior: none;  /* prevents refreshing the page when touch-scroll down */
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #1a1b1a;
 }
 
 .menu{
@@ -16,30 +17,28 @@ body{
     text-align: center;
     padding: 5vmin; /* 5% between the width and height of the window*/
     border: 1vmin rgba(0, 0, 0, 0.6) solid;
-    font-size: 7vmin;
+    border-radius: 14px;
 }
 
-button{
-    font-size: 7vmin;
+.button{
     background: rgb(123, 146, 196);
     color: white;
     cursor: pointer;
     transition: 0.3s;
+    border-radius:10px;
     border: none;
-    border-radius: 1vmin;
+    display: inline;
 }
 
-button:hover{
+.button:hover{
     background: orange;
     color: black;
 }
 
-select{
-    font-size: 7vmin;
-    cursor: pointer;
-    border: none;
-    border-radius: 1vmin;
-    outline: none;
+#difficulty{
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 15px;
 }
 
 #time{
@@ -47,6 +46,7 @@ select{
     top: 0;
     left: 50%;
     transform: translate(-50%);
+    color: whitesmoke;
 }
 
 #imageInput{
@@ -54,8 +54,36 @@ select{
     margin-bottom: 10px;;
     font-size: 3.5vmin;
     cursor: pointer;
-    border: 1px dashed whitesmoke;
+    border: none;
     border-radius: 1vmin;
     color: whitesmoke;
     background-color: gray;
+}
+
+.images_select{
+    background-color: gray;
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height:18rem;
+    text-align: center;
+    font-size: 2rem;
+    color:whitesmoke;
+    padding:0px;
+    margin:0;
+}
+#builtinImages{
+    background-color:gray;
+    border: none;
+}
+#imageSource{
+    border: none;
+    scrollbar-width: thin;
+}
+.form-select{
+    scrollbar-width: thin;
+}
+
+#controls{
+    font-size: 2rem;
 }

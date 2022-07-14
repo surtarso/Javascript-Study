@@ -38,6 +38,7 @@ function main(){
     //hide extra menus
     document.getElementById("builtinImages").style.display = "none";
     document.getElementById("imageInput").style.display = "none";
+    document.getElementById("startButton").style.display = "none";
     //add event listeners for drag n drop operations
     addEventListeners();
 }
@@ -122,12 +123,14 @@ function setImageSource(){
         case "none":
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("builtinImages").style.display = "none";
+            document.getElementById("startButton").style.display = "none";
             break;
         case "builtin":
             using_camera = false;
             using_image = true;
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("builtinImages").style.display = "inline";
+            document.getElementById("startButton").style.display = "inline";
             useBuiltInImage();
             break;
         case "upload":
@@ -135,13 +138,14 @@ function setImageSource(){
             using_image = true;
             document.getElementById("builtinImages").style.display = "none";
             document.getElementById("imageInput").style.display = "inline";
+            document.getElementById("startButton").style.display = "inline";
             useImage();
             break;
         case "webcam":
             using_image = false
             using_camera = true;
             document.getElementById("builtinImages").style.display = "none";
-            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("imageInput").style.display = "inline";
             useCamera();
             break;
     }
@@ -177,14 +181,18 @@ function setDifficulty(){
 // --------------------------------------------------------- START/RESTART:
 // start/restart the game html <button>
 function restart(){
-    //get current time
-    START_TIME = (new Date()).getTime();
-    //reset end time
-    END_TIME = null;
-    randomizePieces();
+    if(VIDEO != null){
+        //get current time
+        START_TIME = (new Date()).getTime();
+        //reset end time
+        END_TIME = null;
+        randomizePieces();
 
-    //hide the main menu
-    document.getElementById("menuItems").style.display = "none";
+        //hide the main menu
+        document.getElementById("menuItems").style.display = "none";
+    } else {
+        alert("Please choose an image!");
+    }
 }
 
 // ------------------------------------------------------------ TIME:
