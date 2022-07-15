@@ -35,11 +35,7 @@
     color: black;
 }
 
-#difficulty{
-    padding: 0px;
-    margin: 0px;
-    margin-bottom: 15px;
-}
+
 
 #time{
     position: absolute;
@@ -73,16 +69,21 @@
     margin:0;
 }
 #builtinImages{
+    scrollbar-width: thin;
     background-color:gray;
     border: none;
 }
-#imageSource{
-    border: none;
-    scrollbar-width: thin;
+
+#imageSource,
+#difficulty{
+    width: 50%;
+    cursor: pointer;
+    margin: auto;
+    margin-top: 15px;
+    left:50;
+    right:50;
 }
-.form-select{
-    scrollbar-width: thin;
-}
+
 
 #controls{
     font-size: 2rem;

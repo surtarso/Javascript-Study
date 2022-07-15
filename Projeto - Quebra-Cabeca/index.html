@@ -20,8 +20,9 @@
             <div id="menu">
                 <div id="controls">
                     <img src="img/title.png" style="width: 90%"/>
-
-                    Peças <select id="difficulty" onchange="setDifficulty()">
+                    
+                    <select id="difficulty" onchange="setDifficulty()" class="form-select mb-2">
+                        <option selected>Escolha o número de peças:</option>
                         <option value="nine">9</option>
                         <option value="sixteen">16</option>
                         <option value="twofive">25</option>
@@ -30,12 +31,14 @@
                         <option value="thousand">1000</option>
                     </select>
                     
-                    <select id="imageSource" onchange="setImageSource()" class="form-select mb-2" multiple>
+                    <select id="imageSource" onchange="setImageSource()" class="form-select mb-2">
                         <option selected value="none">Escolha a origem da imagem:</option>
                         <option value="builtin">Padrões</option>
                         <option value="upload">Upload</option>
                         <option value="webcam">Webcam</option>
                     </select>
+
+                    
 
                     <input accept="image/*" type="file" name="filename" id="imageInput" 
                             style="display: none;">
