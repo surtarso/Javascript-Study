@@ -11,7 +11,7 @@ let START_TIME = null;
 let END_TIME = null;
 // sounds in files
 let POP_SOUND = new Audio('snd/pop.mp3');
-POP_SOUND.volume = 0.5;
+POP_SOUND.volume = 0.8;
 // synthesized audio
 let AUDIO_CONTEXT = new (AudioContext||webkitAudioContext||window.webkitAudioContext)();
 // synth piano keys in hertz (octave 4)
@@ -428,7 +428,8 @@ function onMouseUp(){
     if(SELECTED_PIECE && SELECTED_PIECE.isClose()){
         SELECTED_PIECE.snap();
         // check win condition
-        if(isComplete() && END_TIME == null){  // <-- WIN CONDITION FULFILLED
+        if(isComplete() && END_TIME == null){  // <----- WIN CONDITION FULFILLED
+
             let now = (new Date()).getTime();
             END_TIME = now;
             setTimeout(playWinMelody, 500);
