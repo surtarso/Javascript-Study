@@ -1,4 +1,4 @@
-const IMAGES_FOLDER_URL = 'https://tarsogalvao.ddns.net/games/puzzle/img/boards/padrao/';
+const IMAGES_FOLDER_URL = 'https://tarsogalvao.ddns.net/games/puzzle/img/boards/';
 let PUZZLE_IMG = null;  //element created for inc video/image signal
 let CANVAS = null;  //place where the video element is drawn
 let CONTEXT = null;  //access camera methods
@@ -35,7 +35,8 @@ function main(){
     //use 2d method of the canvas
     CONTEXT = CANVAS.getContext("2d");
     //hide extra menus
-    document.getElementById("builtinImages").style.display = "none";
+    document.getElementById("padraoImages").style.display = "none";
+    document.getElementById("infantilImages").style.display = "none";
     document.getElementById("imageInput").style.display = "none";
     document.getElementById("startButton").style.display = "none";
     //add event listeners for drag n drop operations
@@ -49,21 +50,33 @@ function setImageSource(){
     switch(src){
         case "none":
             document.getElementById("imageInput").style.display = "none";
-            document.getElementById("builtinImages").style.display = "none";
+            document.getElementById("padraoImages").style.display = "none";
+            document.getElementById("infantilImages").style.display = "none";
             document.getElementById("startButton").style.display = "none";
             break;
-        case "builtin":
+        case "padrao":
             using_camera = false;
             using_image = true;
+            document.getElementById("padraoImages").style.display = "inline";
+            document.getElementById("infantilImages").style.display = "none";
             document.getElementById("imageInput").style.display = "none";
-            document.getElementById("builtinImages").style.display = "inline";
             document.getElementById("startButton").style.display = "inline";
-            useBuiltInImage();
+            useBuiltInImage('padrao');
+            break;
+        case "infantil":
+            using_camera = false;
+            using_image = true;
+            document.getElementById("padraoImages").style.display = "none";
+            document.getElementById("infantilImages").style.display = "inline";
+            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("startButton").style.display = "inline";
+            useBuiltInImage('infantil');
             break;
         case "upload":
             using_camera = false;
             using_image = true;
-            document.getElementById("builtinImages").style.display = "none";
+            document.getElementById("padraoImages").style.display = "none";
+            document.getElementById("infantilImages").style.display = "none";
             document.getElementById("imageInput").style.display = "inline";
             document.getElementById("startButton").style.display = "inline";
             useImage();
@@ -71,8 +84,10 @@ function setImageSource(){
         case "webcam":
             using_image = false
             using_camera = true;
-            document.getElementById("builtinImages").style.display = "none";
-            document.getElementById("imageInput").style.display = "inline";
+            document.getElementById("padraoImages").style.display = "none";
+            document.getElementById("infantilImages").style.display = "none";
+            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("startButton").style.display = "inline";
             useCamera();
             break;
     }
@@ -160,8 +175,14 @@ function useCamera(){
 }
 
 //using builtin images (URL)
-function useBuiltInImage(){
-    let image_option = document.getElementById('builtinImages');
+function useBuiltInImage(category){
+    let image_option;
+    if(category == 'padrao'){
+       image_option = document.getElementById('padraoImages');
+    }
+    if(category == 'infantil'){
+        image_option = document.getElementById('infantilImages')
+    }
     let image_base_url = new URL(IMAGES_FOLDER_URL);
 
     image_option.addEventListener('click', function(e) {
@@ -651,7 +672,7 @@ function showEndSCreen(){
 // ------------------------------------------------------------ MENU BUTTON:
 // game-end html menu <button>
 function showMenu(){
-    document.getElementById("builtinImages").style.display = "none";
+    document.getElementById("padraoImages").style.display = "none";
     document.getElementById("endScreen").style.display = "none";
     document.getElementById("menuItems").style.display = "block";
 }

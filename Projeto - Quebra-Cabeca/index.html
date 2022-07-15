@@ -33,7 +33,8 @@
                     
                     <select id="imageSource" onchange="setImageSource()" class="form-select mb-2">
                         <option selected value="none">Escolha a origem da imagem:</option>
-                        <option value="builtin">Padrões</option>
+                        <option value="padrao">Padrões</option>
+                        <option value="infantil">Infantil</option>
                         <option value="upload">Upload</option>
                         <option value="webcam">Webcam</option>
                     </select>
@@ -43,11 +44,21 @@
                     <input accept="image/*" type="file" name="filename" id="imageInput" 
                             style="display: none;">
                     
-                    <select class="form-select form-select-lg mb-2" multiple size="1" id="builtinImages">
-                        <option value="yerka.jpg" style="background-image: url(img/boards/padrao/yerka.jpg);" class="images_select"></option>
-                        <option value="jacek.jpg" style="background-image: url(img/boards/padrao/jacek.jpg);" class="images_select"></option>
-                        <option value="daughter.jpg" style="background-image: url(img/boards/padrao/daughter.jpg);" class="images_select"></option>
-                        <option value="skyline.jpg" style="background-image: url(img/boards/padrao/skyline.jpg);" class="images_select"></option>
+                    <select class="form-select form-select-lg mb-2" multiple size="1" id="padraoImages">
+                        <option value="padrao/yerka.jpg" style="background-image: url(img/boards/padrao/yerka.jpg);" class="images_select"></option>
+                        <option value="padrao/jacek.jpg" style="background-image: url(img/boards/padrao/jacek.jpg);" class="images_select"></option>
+                        <option value="padrao/daughter.jpg" style="background-image: url(img/boards/padrao/daughter.jpg);" class="images_select"></option>
+                        <option value="padrao/skyline.jpg" style="background-image: url(img/boards/padrao/skyline.jpg);" class="images_select"></option>
+                    </select>
+
+                    <select class="form-select form-select-lg mb-2" multiple size="1" id="infantilImages">
+                        <option value="infantil/chapeuzinho.jpg" style="background-image: url(img/boards/infantil/chapeuzinho.jpg);" class="images_select"></option>
+                        <option value="infantil/cirandinha.jpg" style="background-image: url(img/boards/infantil/cirandinha.jpg);" class="images_select"></option>
+                        <option value="infantil/daniel.jpg" style="background-image: url(img/boards/infantil/daniel.jpg);" class="images_select"></option>
+                        <option value="infantil/morph.jpg" style="background-image: url(img/boards/infantil/morph.jpg);" class="images_select"></option>
+                        <option value="infantil/pawpatrol.jpg" style="background-image: url(img/boards/infantil/pawpatrol.jpg);" class="images_select"></option>
+                        <option value="infantil/pjmask.jpg" style="background-image: url(img/boards/infantil/pjmask.jpg);" class="images_select"></option>
+                        <option value="infantil/rubymax.jpg" style="background-image: url(img/boards/infantil/rubymax.jpg);" class="images_select"></option>
                     </select>
                     <br>
                     <button onclick="restart()" class="button" id="startButton">Iniciar</button>

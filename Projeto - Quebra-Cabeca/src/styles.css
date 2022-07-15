@@ -73,7 +73,8 @@
     margin:0;
 }
 
-#builtinImages{
+#padraoImages,
+#infantilImages{
     width: 60%;
     cursor: pointer;
     scrollbar-width: thin;
