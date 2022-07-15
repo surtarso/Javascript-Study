@@ -35,10 +35,7 @@ function main(){
     //use 2d method of the canvas
     CONTEXT = CANVAS.getContext("2d");
     //hide extra menus
-    document.getElementById("padraoImages").style.display = "none";
-    document.getElementById("infantilImages").style.display = "none";
-    document.getElementById("imageInput").style.display = "none";
-    document.getElementById("startButton").style.display = "none";
+    setMenuDisplay('none');
     //add event listeners for drag n drop operations
     addEventListeners();
 }
@@ -49,46 +46,81 @@ function setImageSource(){
     let src = document.getElementById("imageSource").value;
     switch(src){
         case "none":
+            setMenuDisplay('none');
+            break;
+        case "padrao":
+            setMenuDisplay('padrao');
+            useBuiltInImage('padrao');
+            break;
+        case "infantil":
+            setMenuDisplay('infantil');
+            useBuiltInImage('infantil');
+            break;
+        case "upload":
+            setMenuDisplay('upload');
+            useImage();
+            break;
+        case "webcam":
+            setMenuDisplay('webcam');
+            useCamera();
+            break;
+    }
+}
+
+//----------------------------------------------------------- MENU DISPLAY:
+function setMenuDisplay(string){
+    switch(string){
+        case 'menu':
+            document.getElementById("imageSource").value = 'none';
+            document.getElementById("imageInput").style.display = "none";
+            document.getElementById("padraoImages").style.display = "none";
+            document.getElementById("infantilImages").style.display = "none";
+            document.getElementById("endScreen").style.display = "none";
+            document.getElementById("menuItems").style.display = "block";
+            document.getElementById("startButton").style.display = "none";
+            break;
+        case 'none':
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("padraoImages").style.display = "none";
             document.getElementById("infantilImages").style.display = "none";
             document.getElementById("startButton").style.display = "none";
             break;
-        case "padrao":
+        case 'padrao':
             using_camera = false;
             using_image = true;
             document.getElementById("padraoImages").style.display = "inline";
             document.getElementById("infantilImages").style.display = "none";
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("startButton").style.display = "inline";
-            useBuiltInImage('padrao');
             break;
-        case "infantil":
+        case 'infantil':
             using_camera = false;
             using_image = true;
             document.getElementById("padraoImages").style.display = "none";
             document.getElementById("infantilImages").style.display = "inline";
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("startButton").style.display = "inline";
-            useBuiltInImage('infantil');
             break;
-        case "upload":
+        case 'upload':
             using_camera = false;
             using_image = true;
             document.getElementById("padraoImages").style.display = "none";
             document.getElementById("infantilImages").style.display = "none";
             document.getElementById("imageInput").style.display = "inline";
             document.getElementById("startButton").style.display = "inline";
-            useImage();
             break;
-        case "webcam":
-            using_image = false
+        case 'webcam':
+            using_image = false;
             using_camera = true;
             document.getElementById("padraoImages").style.display = "none";
             document.getElementById("infantilImages").style.display = "none";
             document.getElementById("imageInput").style.display = "none";
             document.getElementById("startButton").style.display = "inline";
-            useCamera();
+            break;
+        case 'endscreen':
+            const time = END_TIME - START_TIME;
+            document.getElementById("scoreValue").innerHTML = "Score: " + time;
+            document.getElementById("endScreen").style.display = "block";
             break;
     }
 }
@@ -177,12 +209,15 @@ function useCamera(){
 //using builtin images (URL)
 function useBuiltInImage(category){
     let image_option;
-    if(category == 'padrao'){
-       image_option = document.getElementById('padraoImages');
+    switch(category){
+        case 'padrao':
+            image_option = document.getElementById('padraoImages');
+            break;
+        case 'infantil':
+            image_option = document.getElementById('infantilImages');
+            break;
     }
-    if(category == 'infantil'){
-        image_option = document.getElementById('infantilImages')
-    }
+
     let image_base_url = new URL(IMAGES_FOLDER_URL);
 
     image_option.addEventListener('click', function(e) {
@@ -398,7 +433,8 @@ function onMouseUp(){
             let now = (new Date()).getTime();
             END_TIME = now;
             setTimeout(playWinMelody, 500);
-            showEndSCreen();
+            //show end-screen
+            setMenuDisplay('endscreen');
         }
     }
     SELECTED_PIECE = null;
@@ -658,25 +694,6 @@ class Piece{
         this.correct = true;
     }
 }
-
-
-// ------------------------------------------------------------ END SCREEN:
-// called by last onMouseUp() when puzzle is completed
-function showEndSCreen(){
-    const time = END_TIME - START_TIME;
-    document.getElementById("scoreValue").innerHTML = "Score: " + time;
-    document.getElementById("endScreen").style.display = "block";
-}
-
-
-// ------------------------------------------------------------ MENU BUTTON:
-// game-end html menu <button>
-function showMenu(){
-    document.getElementById("padraoImages").style.display = "none";
-    document.getElementById("endScreen").style.display = "none";
-    document.getElementById("menuItems").style.display = "block";
-}
-
 
 // ----------------------------------------------------- DISTANCE CALCULATOR:
 // calculates distance from piece location 
