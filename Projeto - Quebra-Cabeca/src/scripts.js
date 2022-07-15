@@ -1,4 +1,4 @@
-const IMAGES_FOLDER_URL = 'https://tarsogalvao.ddns.net/games/puzzle/img/boards/';
+const IMAGES_FOLDER_URL = 'https://tarsogalvao.ddns.net/games/puzzle/img/boards/padrao/';
 let PUZZLE_IMG = null;  //element created for inc video/image signal
 let CANVAS = null;  //place where the video element is drawn
 let CONTEXT = null;  //access camera methods
