@@ -102,6 +102,8 @@ function setDifficulty(){
         case "thousand":
             initializePieces(40, 25);  // 1000 pieces
             break;
+        case 'default':
+            alert("escolha o número de peças!")
     }
 }
 

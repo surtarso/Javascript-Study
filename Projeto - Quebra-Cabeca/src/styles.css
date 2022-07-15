@@ -6,6 +6,10 @@
     background-color: #1a1b1a;
 }
 
+.titleimage{
+    width: 90%;
+}
+
 .menu{
     width: 80vmin;
     position: absolute;
@@ -68,10 +72,14 @@
     padding:0px;
     margin:0;
 }
+
 #builtinImages{
+    width: 60%;
+    cursor: pointer;
     scrollbar-width: thin;
     background-color:gray;
     border: none;
+    margin-top: 15px;
 }
 
 #imageSource,
