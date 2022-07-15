@@ -58,7 +58,7 @@ function setImageSource(){
             break;
         case "upload":
             setMenuDisplay('upload');
-            useImage();
+            useUploadImage();
             break;
         case "webcam":
             setMenuDisplay('webcam');
@@ -156,27 +156,60 @@ function setDifficulty(){
 
 //------------------------------------------------------ INITIATE PUZZLE IMAGE:
 //using an uploaded image (FILE)
-function useImage(){
+function useUploadImage(){
     let imgInput = document.getElementById('imageInput');
     imgInput.addEventListener('change', function(e) {
-    if(e.target.files) {
-        let imageFile = e.target.files[0]; //here we get the image file
-        var reader = new FileReader();
-        reader.readAsDataURL(imageFile);
-        reader.onloadend = function (e) {
-            PUZZLE_IMG = new Image(); // Creates image object
-            PUZZLE_IMG.src = e.target.result; // Assigns converted image to image object
-            PUZZLE_IMG.onload = function(ev) {
-                CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
-                CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
-                handleResize("image");
-                //listen to resize events
-                window.addEventListener('resize', handleResize);
-                initializePieces(SIZE.rows, SIZE.columns);
-                updateGame();
+        if(e.target.files) {
+
+            let imageFile = e.target.files[0]; //here we get the image file
+            var reader = new FileReader();
+            reader.readAsDataURL(imageFile);
+            reader.onloadend = function (e) {
+                
+                PUZZLE_IMG = new Image(); // Creates image object
+                PUZZLE_IMG.src = e.target.result; // Assigns converted image to image object
+                PUZZLE_IMG.onload = function(ev) {
+                    CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
+                    CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
+                    handleResize("image");
+                    //listen to resize events
+                    window.addEventListener('resize', handleResize);
+                    initializePieces(SIZE.rows, SIZE.columns);
+                    updateGame();
                 }
             }
         }
+    }); 
+}
+
+//using builtin images (URL)
+function useBuiltInImage(category){
+    //set category
+    let image_option;
+    switch(category){
+        case 'padrao':
+            image_option = document.getElementById('padraoImages');
+            break;
+        case 'infantil':
+            image_option = document.getElementById('infantilImages');
+            break;
+    }
+    let image_base_url = new URL(IMAGES_FOLDER_URL);
+    //get file
+    image_option.addEventListener('click', function(e) {
+        let imageFile = new URL(image_option.value, image_base_url);
+        PUZZLE_IMG = new Image(); // Creates image object
+        PUZZLE_IMG.src = imageFile; // Assigns converted image to image object
+        //load file
+        PUZZLE_IMG.onload = function(ev) {
+            CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
+            CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
+            handleResize("image");
+            //listen to resize events
+            window.addEventListener('resize', handleResize);
+            initializePieces(SIZE.rows, SIZE.columns);
+            updateGame();
+        }    
     }); 
 }
 
@@ -199,46 +232,12 @@ function useCamera(){
             window.addEventListener('resize', handleResize);
             initializePieces(SIZE.rows, SIZE.columns);
             updateGame();
-         }
+        }
     //error handling for camera input
     }).catch(function(err){
         alert("Camera error: " + err);
     });
 }
-
-//using builtin images (URL)
-function useBuiltInImage(category){
-    let image_option;
-    switch(category){
-        case 'padrao':
-            image_option = document.getElementById('padraoImages');
-            break;
-        case 'infantil':
-            image_option = document.getElementById('infantilImages');
-            break;
-    }
-
-    let image_base_url = new URL(IMAGES_FOLDER_URL);
-
-    image_option.addEventListener('click', function(e) {
-
-        let imageFile = new URL(image_option.value, image_base_url);
-
-        PUZZLE_IMG = new Image(); // Creates image object
-        PUZZLE_IMG.src = imageFile; // Assigns converted image to image object
-        PUZZLE_IMG.onload = function(ev) {
-            CANVAS.width = PUZZLE_IMG.width; // Assigns image's width to canvas
-            CANVAS.height = PUZZLE_IMG.height; // Assigns image's height to canvas
-            handleResize("image");
-            //listen to resize events
-            window.addEventListener('resize', handleResize);
-            initializePieces(SIZE.rows, SIZE.columns);
-            updateGame();
-            }
-            
-    }); 
-}
-
 // ------------------------------------------------------------ RESIZE HANDLER:
 function handleResize(string){
     // fill the windows with the canvas
