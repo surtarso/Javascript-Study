@@ -26,6 +26,11 @@ let keys = {
 //toggler for camara/image functions
 let using_camera = false;
 let using_image = false;
+//buttons
+let MENU_BTN;
+let END_BTN;
+let DIFF_BTN;
+let IMG_BTN;
 
 // ------------------------------------------------------------ MAIN FUNC:
 //main function is called in html's <body> "onload"
@@ -34,6 +39,10 @@ function main(){
     CANVAS = document.getElementById("myCanvas");
     //use 2d method of the canvas
     CONTEXT = CANVAS.getContext("2d");
+    MENU_BTN = document.getElementById('startButton');
+    END_BTN = document.getElementById('endButton');
+    DIFF_BTN = document.getElementById('difficulty');
+    IMG_BTN = document.getElementById('imageSource');
     //hide extra menus
     setMenuDisplay('none');
     //add event listeners for drag n drop operations
@@ -373,6 +382,11 @@ function addEventListeners(){
     CANVAS.addEventListener("touchstart", onTouchStart);
     CANVAS.addEventListener("touchmove", onTouchMove);
     CANVAS.addEventListener("touchend", onTouchEnd);
+    // menu buttons
+    MENU_BTN.addEventListener('click', restart);
+    END_BTN.addEventListener('click', function(){ setMenuDisplay('menu') }, false);
+    DIFF_BTN.addEventListener('change', setDifficulty);
+    IMG_BTN.addEventListener('change', setImageSource);
 }
 
 // --------------------------------------------------------- TOUCH EVENTS:
@@ -779,3 +793,6 @@ function playStartMelody(){
         playNote(keys.G4, 300);
     }, 600);
 }
+
+//Start the game
+main();
