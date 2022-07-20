@@ -1,26 +1,32 @@
-CANVAS = document.getElementById("gameCanvas");
-CONTEXT = CANVAS.getContext("2d");
-SNAKE_SIZE = document.getElementById("size");
+const CANVAS = document.getElementById("gameCanvas");
+const CONTEXT = CANVAS.getContext("2d");
+var SNAKE_SIZE = document.getElementById("size");
 
 //size relation
 CANVAS.width = CANVAS.height = 400;
-grid_size = tile_count = 20;
+let grid_size = tile_count = 20;
 
 //snake and apple start position
-snake_x = snake_y = 10;
-apple_x = apple_y = 15;
+let snake_x = snake_y = 10;
+let apple_x = apple_y = 15;
 //tail initial size
-snake_tail_initial = 3
-snake_tail = snake_tail_initial;
-snake_trail = [];
+let snake_tail_initial = 3
+let snake_tail = snake_tail_initial;
+var snake_trail = [];
 
-score = 0
+var score = 0
 
 //initial move direction (stopped)
-x_velocity = y_velocity = 0;
-snake_speed = 5
+let x_velocity = y_velocity = 0;
+var snake_speed = 5
 //keyboard keys listener
 document.addEventListener("keydown",keyPush);
+//touch keys listeners
+var up_btn = document.getElementById('upBtn').addEventListener('click', u);
+var down_btn = document.getElementById('downBtn').addEventListener('click', d);
+var left_btn = document.getElementById('leftBtn').addEventListener('click', l);
+var right_btn = document.getElementById('rightBtn').addEventListener('click', r);
+
 setInterval(updateGame,1000/snake_speed);
 
 //----------------------------------------MAIN UPDATE:
