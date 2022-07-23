@@ -122,10 +122,10 @@ function move(){
         var b = bricks[i];
         if (!b.active){ continue };
         // ball hits brick
-        if (b.x < ball_loc_x + ball_size &&
-                ball_loc_x - ball_size < b.x + brick_width &&
-                    b.y < ball_loc_y + ball_size &&
-                        ball_loc_y - ball_size < b.y + brick_height){
+        if (b.x < ball_loc_x + ball_size - 1 &&
+                ball_loc_x - ball_size - 1 < b.x + brick_width &&
+                    b.y < ball_loc_y + ball_size - 1 &&
+                        ball_loc_y - ball_size < b.y + brick_height - 1){
             //deactivate brick
             b.active = false;
             //bounce
@@ -165,3 +165,4 @@ document.addEventListener("keydown", function(e){
 //set-up bricks and start game
 init();
 setInterval(updateGame, 1);
+// setInterval(() => {updateGame()}, 1000/30);
