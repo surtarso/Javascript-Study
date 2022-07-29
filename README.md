@@ -1,6 +1,4 @@
-# <img src="ico.png" width=30 height=30> JavaScript - Projects
-
-Here lies my javascript studies and projects.
+# <img src="ico.png" width=30 height=30> JavaScript
 
 ## Quick Links:
 - [Jogo da Memória](https://github.com/surtarso/javaScript-Projects/tree/main/Projects/Desafio%20-%20Jogo%20da%20Memoria) - Jogo da memória com várias opções de cartas temáticas. [Play me!](https://tarsogalvao.ddns.net/games/memoria)
