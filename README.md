@@ -8,3 +8,5 @@
 - [Pong](https://github.com/surtarso/javaScript-Projects/tree/main/Projects/Projeto%20-%20Pong) - Um clássico de todas as plataformas! [Play me!](https://tarsogalvao.ddns.net/games/pong)
 
 - [Snake](https://github.com/surtarso/javaScript-Projects/tree/main/Projects/Projeto%20-%20Snake%20Game) - Classico "jogo da cobrinha" dos antigos celulares Nokia. [Play me!](https://tarsogalvao.ddns.net/games/snake)
+
+- [Brick Breaker](https://github.com/surtarso/javaScript-Projects/tree/main/Projects/Projeto%20-%20Brick%20Breaker) - Um clássico de todas as plataformas! [Play me!](https://tarsogalvao.ddns.net/games/brickbreaker)
