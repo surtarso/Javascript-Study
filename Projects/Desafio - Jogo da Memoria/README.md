@@ -1,7 +1,9 @@
 # Desafio de Projeto - TGI Bootcamp - DIO
 
 ## Jogo da Memória em HTML, CSS & JavaScript
-##### Modificações do exemplo dado em aula:
+<img src='./memoria.png' width='50%' height='50%' />
+
+#### Modificações do exemplo dado em aula:
     - Reconstrução completa do código [js]
     - Feature: Aumento do numero de cartas jogáveis de 6 para 9 pares [js, css, html]
     - Feature: Temas e botão para mudar de tema [js, css, html]
